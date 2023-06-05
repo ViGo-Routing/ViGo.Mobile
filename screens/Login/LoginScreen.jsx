@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { themeColors } from '../../assets/theme';
+import React from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { themeColors } from '../../assets/theme'
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ export default function LoginScreen() {
           secureTextEntry={true}
         />
         <Text style={styles.link}>
-          forgot your passowrd?
+          Forgot your password?
         </Text>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     padding: 20,
-    paddingBottom:80,
+    paddingBottom: 80,
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    marginBottom: 50,
+    marginTop: 40,
+    marginBottom: 30,
   },
   title: {
     textAlign: 'left',
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   },
   smallText: {
     fontSize: 20,
-    paddingBottom:15
+    paddingBottom: 15
   },
   input: {
     height: 50,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    textAlign:'center',
+    textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
   },
@@ -96,8 +97,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   link: {
+    // textAlign:'center',
     color: themeColors.primary,
-    fontSize:16,
-    textDecorationLine: 'underline',
+    fontSize: 16,
+    // textDecorationLine: 'underline',
   },
 });

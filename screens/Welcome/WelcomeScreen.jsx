@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { themeColors } from '../../assets/theme';
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { themeColors } from '../../assets/theme'
+import CustomButton from '../../components/Button/CustomButton.jsx'
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
@@ -12,9 +13,16 @@ const WelcomeScreen = () => {
         source={require("../../assets/images/ViGo_logo.png")}
         style={styles.image}
       />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+     <View style={styles.buttonContainer}>
+          <CustomButton
+            style={styles.btn}
+            title="Update"
+          onPress={() => navigation.navigate('Login')}
+          />
+        </View>
+      {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Continue</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -25,25 +33,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: themeColors.linear,
-    
+
   },
   title: {
     fontSize: 36,
     fontWeight: 'bold',
     color: themeColors.primary,
   },
-  button: {
-    backgroundColor: themeColors.primary,
-    marginTop: 30,
-    paddingVertical: 10,
-    paddingHorizontal: 100,
-    borderRadius: 20,
-    marginBottom: 10,
-  },
-  buttonText: {
-    textAlign:'center',
-    color: '#fff',
-    fontWeight: 'bold',
+  buttonContainer: {
+    width: "90%",
   },
 });
 

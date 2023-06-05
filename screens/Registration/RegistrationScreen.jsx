@@ -28,7 +28,7 @@ export default function RegistrationScreen() {
           placeholder="Password"
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <Text style={styles.registerText}>
@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    marginBottom: 50,
+    marginTop: 40,
+    marginBottom: 30,
   },
   title: {
     textAlign: 'left',
@@ -99,6 +100,6 @@ const styles = StyleSheet.create({
   registerLink: {
     color: themeColors.primary,
     fontSize: 16,
-    textDecorationLine: 'underline',
+    // textDecorationLine: 'underline',
   },
 });
