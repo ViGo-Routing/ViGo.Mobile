@@ -1,64 +1,93 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { React, useState, useRef } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { themeColors } from '../../assets/theme';
+import { Ionicons } from '@expo/vector-icons';
 
+//IMPORT THEME
+import { themeColors } from '../../assets/theme';
+// IMPORT FIREBASE 
 import firebase from 'firebase/compat/app';
 
-export default function ConfirmCodeScreen() {
+//IMPORT COMPONENTS
+
+
+export default function ConfirmCodeScreen({ route }) {
 
     const [code, setCode] = useState('');
-    const [vertificationId, setVertificationId] = useState('');
-
+    const { verificationId } = route.params;
     const confirmCode = () => {
         const credential = firebase.auth.PhoneAuthProvider.credential(
-          vertificationId,
-          code
+            verificationId,
+            code
         );
         firebase.auth().signInWithCredential(credential)
-        .then(()=> {
-          setCode('');
-        })
-        .catch((error) => {
-          //show an alert in case of error
-          alert(error);
-        })
-        Alert.alert(
-          'Đăng nhập thành công! Hãy đặt chuyến xe đầu tiên của bạn nào'
-        )
-      };
+            .then(() => {
+                setCode('');
+                Alert.alert(
+                    'Đăng nhập thành công! Hãy đặt chuyến xe đầu tiên của bạn nào',
+                    "",
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                navigation.navigate('Home')
+                            },
+                        },
+                    ],
+                );
+            })
+            .catch((error) => {
+                //show an alert in case of error
+                alert(error);
+            })
+    };
 
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <Image
-                source={require("../../assets/images/ViGo_logo.png")}
-                style={styles.image}
-            />
-            <View style={styles.card}>
-                <Text style={styles.title}>OTP</Text>
-                <Text style={styles.smallText}>nhập mã OTP</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder='+84'
-                    onChangeText={setCode}
-                    autoFocus
-                    keyboardType='phone-pad'
-                />
-                <TouchableOpacity style={styles.button} onPress={confirmCode}>
-                    <Text style={styles.buttonText}>Nhập OTP</Text>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={30} color={themeColors.primary} />
                 </TouchableOpacity>
+            </View>
+            <View style={styles.body}>
+                <Image
+                    source={require("../../assets/images/ViGo_logo.png")}
+                    style={styles.image}
+                />
+                <View style={styles.card}>
+                    <Text style={styles.title}>OTP</Text>
+                    <Text style={styles.smallText}>Xác minh tài khoản</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder=''
+                        onChangeText={setCode}
+                        keyboardType='phone-pad'
+                    />
+                    <TouchableOpacity style={styles.button} onPress={confirmCode}>
+                        <Text style={styles.buttonText}>Xác nhận</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    header: {
+        paddingLeft: 25,
+        paddingRight:"85%",
+        paddingBottom:"20%",
+        backgroundColor: "transparent",
+    },
     container: {
         flex: 1,
         backgroundColor: themeColors.linear,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    body: {
+        marginTop: -60
     },
     card: {
         backgroundColor: '#fff',
@@ -74,6 +103,7 @@ const styles = StyleSheet.create({
     image: {
         marginTop: 40,
         marginBottom: 30,
+        alignSelf: 'center',
     },
     title: {
         textAlign: 'left',

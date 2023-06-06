@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
+import {ViewPropTypes} from 'deprecated-react-native-prop-types'
 import { themeColors } from '../../assets/theme/index.jsx'
 import { useNavigation } from '@react-navigation/native'
 // IMPORT COMPONENTS
