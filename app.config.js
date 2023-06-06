@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "ViGo.Mobile",
     "slug": "ViGo.Mobile",
@@ -26,5 +26,5 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
 }

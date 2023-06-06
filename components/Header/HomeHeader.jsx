@@ -9,7 +9,7 @@ const HomeHeader = () => {
         <View style={styles.container}>
             <TextInput
                 style={styles.searchbar}
-                placeholder=" 🔍 Search"
+                placeholder=" 🔍 Tìm dịch vụ, món ngon, địa điểm"
             />
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
                 <Image

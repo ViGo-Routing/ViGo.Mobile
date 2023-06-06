@@ -12,29 +12,33 @@ export default function RegistrationScreen() {
         style={styles.image}
       />
       <View style={styles.card}>
-        <Text style={styles.title}>Register</Text>
-        <Text style={styles.smallText}>Create account for ViGo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
+        <Text style={styles.title}>Đăng ký</Text>
+        <Text style={styles.smallText}>Tạo tài khoản ViGo</Text>
+        <TextInput 
+        style={styles.input}
+          placeholder='+84'
+          autoFocus
+          autoCompleteType='tel'
+          keyboardType='phone-pad'
+          // textContentType='telephoneNumber'
+          // onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
         />
         <TextInput
           style={styles.input}
-          placeholder="Fullname"
+          placeholder="Họ và tên"
         />
         <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="Mật khẩu"
           secureTextEntry={true}
         />
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>Đăng ký</Text>
         </TouchableOpacity>
         <Text style={styles.registerText}>
-          Already have an account?{' '}
+          Bạn đã có tài khoản rồi?{' '}
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.registerLink}>Login here.</Text>
+            <Text style={styles.registerLink}>Đăng nhập</Text>
           </TouchableOpacity>
         </Text>
       </View>

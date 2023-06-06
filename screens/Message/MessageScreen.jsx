@@ -6,7 +6,7 @@ import BottomNavigationBar from '../../components/NavBar/BottomNavigationBar.jsx
 const MessageScreen = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.footer}><Header title="MessageScreen" /></View>
+      <View style={styles.footer}><Header title="Hộp thư" /></View>
       <View style={styles.body}><Text>MessageScreen</Text></View>
       <View style={styles.footer}><BottomNavigationBar /></View>
     </View>
@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,            // all the available vertical space will be occupied by it
     justifyContent: 'space-between' // will create the gutter between body and footer
   },
+  body :{
+    flex:1,
+  }
 });
 
 export default MessageScreen;

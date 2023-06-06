@@ -15,6 +15,8 @@ import HistoryScreen from '../screens/History/HistoryScreen';
 import MyRouteScreen from '../screens/MyRoute/MyRouteScreen';
 import ProfileSreen from '../screens/Profile/ProfileScreen';
 import EditProfileScreen from '../screens/Profile/EditProfileScreen';
+import LoginSuccessScreen from '../screens/Welcome/WelcomeLoginScreen';
+import ConfirmCodeScreen from '../screens/Login/ConfirmCode';
 
 
 const Stack = createNativeStackNavigator();
@@ -23,10 +25,12 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Welcome'>
+      <Stack.Navigator initialRouteName='Login'>
+      <Stack.Screen name="ConfirmCode" options={{headerShown: false}} component={ConfirmCodeScreen} />
         <Stack.Screen name="Home" options={{headerShown: false}} component={HomeScreen} />
         <Stack.Screen name="Welcome" options={{headerShown: false}} component={WelcomeScreen} />
         <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />
+        <Stack.Screen name="LoginSuccess" options={{headerShown: false}} component={LoginSuccessScreen} />
         <Stack.Screen name="Registration" options={{headerShown: false}} component={RegistrationScreen} />
         <Stack.Screen name="MenuSetting" options={{headerShown: false}} component={MenuSettingScreen}/>
         <Stack.Screen name="Message" options={{headerShown: false}} component={MessageScreen}/>

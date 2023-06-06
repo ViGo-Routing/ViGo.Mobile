@@ -1,30 +1,46 @@
-import React from 'react';
-import { View, TextInput, Image, StyleSheet, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { themeColors } from '../../assets/theme';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const Profile = () => {
+  const [imageSource, setImageSource] = useState('https://avatars.githubusercontent.com/u/66261053?v=4');
+
+  const handleImagePress = () => {
+    launchImageLibrary({}, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        setImageSource(response.uri);
+      }
+    }).catch((error) => {
+      console.log('Error launching image library: ', error);
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={{ uri: 'https://avatars.githubusercontent.com/u/66261053?v=4' }}
-        />
+      <TouchableOpacity onPress={handleImagePress}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{ uri: imageSource }} />
+        </View>
+      </TouchableOpacity>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputTitle}>Họ và Tên</Text>
+        <View style={styles.inputBorder}>
+          <TextInput style={styles.input} />
+        </View>
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.inputTitle}>Name</Text>
+        <Text style={styles.inputTitle}>Số điện thoại</Text>
         <View style={styles.inputBorder}>
           <TextInput style={styles.input} />
         </View>
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.inputTitle}>Email</Text>
-        <View style={styles.inputBorder}>
-          <TextInput style={styles.input} />
-        </View>
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputTitle}>Phone</Text>
         <View style={styles.inputBorder}>
           <TextInput style={styles.input} />
         </View>

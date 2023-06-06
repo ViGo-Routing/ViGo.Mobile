@@ -3,35 +3,35 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-nati
 import Header from '../../components/Header/Header.jsx'
 // import BottomNavigationBar from '../../components/NavBar/BottomNavigationBar.jsx'
 import ProfileCard from '../../components/Card/ProfileCard.jsx'
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'
 import { themeColors } from '../../assets/theme/index.jsx'
 import { useNavigation } from '@react-navigation/native'
 
 const ProfileSreen = () => {
     const navigation = useNavigation();
     const listAccountUtilities = [
-        { icon: 'create', label: 'Edit Profile', navigator: 'EditProfile' },
-        { icon: 'pricetags', label: 'Promotions', navigator: 'Promotion' },
-        { icon: 'wallet', label: 'Payment Method', navigator: 'PaymentMethod' },
-        { icon: 'help-circle', label: 'Help & My Tickets', navigator: 'Help' },
-        { icon: 'bookmark', label: 'Saved Addresses', navigator: 'MyAddresses' },
-        { icon: 'shield', label: 'Account Safety', navigator: 'Safety' },
-        { icon: 'person', label: 'Manage Account', navigator: 'Manage Account' },
+        { icon: 'create', label: 'Chỉnh sửa hồ sơ', navigator: 'EditProfile' },
+        { icon: 'pricetags', label: 'Khuyến mãi', navigator: 'Promotion' },
+        { icon: 'wallet', label: 'Phương thức thanh toán', navigator: 'PaymentMethod' },
+        { icon: 'help-circle', label: 'Trợ giúp & yêu cầu hỗ trợ', navigator: 'Help' },
+        { icon: 'bookmark', label: 'Địa điểm đã lưu', navigator: 'MyAddresses' },
+        { icon: 'shield', label: 'Bảo mật tài khoản', navigator: 'Safety' },
+        { icon: 'person', label: 'Quản lý tài khoản', navigator: 'Manage Account' },
     ];
     const listGeneralUtilities = [
-        { icon: 'clipboard', label: 'Regulations', navigator: 'RegulationScreen' },
-        { icon: 'document', label: 'Term & Privacy', navigator: 'Screen2' },
-        { icon: 'analytics', label: 'Data Attribution', navigator: 'Screen1' },
-        { icon: 'star', label: 'Rate ViGo App', navigator: 'Screen2' },
-
+        { icon: 'clipboard', label: 'Quy chế', navigator: 'RegulationScreen' },
+        { icon: 'document', label: 'Bảo mật & Điều khoản', navigator: 'Screen2' },
+        // { icon: 'analytics', label: 'Dữ liệu', navigator: 'Screen1' },
+        { icon: 'star', label: 'Đánh giá ứng dụng Gojeck', navigator: 'Screen2' },
+        { icon: '', label: '', navigator: '' },
     ];
     return (
         <View style={styles.container}>
-            <View style={styles.footer}><Header title="ProfileSreen" /></View>
+            <View style={styles.header}><Header title="Thông tin tài khoản" /></View>
             <ScrollView style={styles.body}>
-                <ProfileCard name="Tran Gia Hoang" phoneNumber="123-456-789" imageSource="" />
+                <ProfileCard name="Tran Gia Hoang" phoneNumber="123-456-789" imageSource={{ uri: 'https://avatars.githubusercontent.com/u/66261053?v=4' }} />
 
-                <Text style={styles.title}>Account</Text>
+                <Text style={styles.title}>Tài Khoản</Text>
                 {listAccountUtilities.map((item, index) => (
                     <TouchableOpacity key={index} style={styles.list} onPress={() => navigation.navigate(item.navigator)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -41,7 +41,7 @@ const ProfileSreen = () => {
                     </TouchableOpacity>
                 ))}
 
-                <Text style={styles.title}>General</Text>
+                <Text style={styles.title}>Thông tin chung</Text>
                 {listGeneralUtilities.map((item, index) => (
                     <TouchableOpacity key={index} style={styles.list}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -51,7 +51,9 @@ const ProfileSreen = () => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-            {/* <View style={styles.footer}><BottomNavigationBar /></View> */}
+            <View style={styles.footer}>
+                {/* <BottomNavigationBar /> */}
+                </View>
         </View>
     );
 }
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between' // will create the gutter between body and footer
     },
     body: {
+        backgroundColor: themeColors.linear,
         padding: 20,
         flex: 1,
     },

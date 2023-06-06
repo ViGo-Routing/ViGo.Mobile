@@ -6,7 +6,7 @@ import BottomNavigationBar from '../../components/NavBar/BottomNavigationBar.jsx
 const PromotionScreen = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.footer}><Header title="" /></View>
+      <View style={styles.footer}><Header title="Khuyến Mãi" /></View>
       <View style={styles.body}><Text>Promotion</Text></View>
       <View style={styles.footer}><BottomNavigationBar /></View>
     </View>
@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,            // all the available vertical space will be occupied by it
     justifyContent: 'space-between' // will create the gutter between body and footer
   },
+  body :{
+    flex:1,
+  }
 });
 
 export default PromotionScreen;

@@ -1,9 +1,48 @@
-import React from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { themeColors } from '../../assets/theme'
+import { React, useState, useRef } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+// IMPORT THEME
+import { themeColors } from '../../assets/theme';
+
+// IMPORT FIREBASE 
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { firebaseConfig } from '../../firebase.js';
+import firebase from 'firebase/compat/app';
 
 export default function LoginScreen() {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [code, setCode] = useState('');
+  const [vertificationId, setVertificationId] = useState(null);
+  const recaptchaVerifier = useRef(null);
+
+  const sendVerification = () => {
+    const phoneProvider = new firebase.auth.PhoneAuthProvider();
+    phoneProvider
+      .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
+      .then(setVertificationId);
+    // .then.navigation.navigate('ConFirmCode');
+    setPhoneNumber('');
+  };
+
+  const confirmCode = () => {
+    const credential = firebase.auth.PhoneAuthProvider.credential(
+      vertificationId,
+      code
+    );
+    firebase.auth().signInWithCredential(credential)
+      .then(() => {
+        setCode('');
+      })
+      .catch((error) => {
+        //show an alert in case of error
+        alert(error);
+      })
+    Alert.alert(
+      'Đăng nhập thành công! Hãy đặt chuyến xe đầu tiên của bạn nào'
+    );
+  }
+
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -12,28 +51,47 @@ export default function LoginScreen() {
         style={styles.image}
       />
       <View style={styles.card}>
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.smallText}>Welcome to ViGo</Text>
+        <Text style={styles.title}>Đăng nhập</Text>
+        <Text style={styles.smallText}>Chào mừng bạn đến ViGo</Text>
         <TextInput
           style={styles.input}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
+          onChangeText={setPhoneNumber}
+          placeholder='+84'
+          autoCompleteType='tel'
+          keyboardType='phone-pad'
+        // textContentType='telephoneNumber'
+        // onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="Mật khẩu"
           secureTextEntry={true}
+        /> */}
+        <TextInput
+          style={styles.input}
+          placeholder='OTP Code'
+          onChangeText={setCode}
+          keyboardType='phone-pad'
         />
-        <Text style={styles.link}>
-          Forgot your password?
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
+        <TouchableOpacity style={styles.button} onPress={sendVerification}>
+          <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={confirmCode}>
+          <Text style={styles.buttonText}>Nhập OTP</Text>
+        </TouchableOpacity>
+        <Text style={styles.link}>
+          Quên mật khẩu?
+        </Text>
+
+        <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifier}
+          firebaseConfig={firebaseConfig}
+        />
+
         <Text style={styles.registerText}>
-          Don't have an account?{' '}
+          Bạn chưa có tài khoản?{' '}
           <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
-            <Text style={styles.link}>Register here.</Text>
+            <Text style={styles.link}>Đăng ký</Text>
           </TouchableOpacity>
         </Text>
       </View>

@@ -9,13 +9,13 @@ import Profile from '../../components/Profile/Profile.jsx'
 const EditProfileScreen = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.footer}><Header title="Edit Profile" /></View>
+      <View style={styles.footer}><Header title="Chỉnh sửa hồ sơ" /></View>
       <View style={styles.body}>
         <Profile />
         <View style={styles.buttonContainer}>
           <CustomButton
             style={styles.btn}
-            title="Update"
+            title="Cập nhật"
           // onPress={() => navigation.navigate('Details')}
           />
         </View>
