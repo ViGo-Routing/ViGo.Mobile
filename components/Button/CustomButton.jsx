@@ -1,26 +1,40 @@
-import React from 'react'
-import { TouchableOpacity, Text, StyleSheet } from 'react-native'
+import React from 'react';
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { themeColors } from '../../assets/theme';
 
-const Button = ({ title, onPress }) => {
-    return (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
-        </TouchableOpacity>
-    );
+const CustomButton = ({ buttons }) => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.iconRow}>
+      {buttons.map((button) => (
+        <View style={styles.box} key={button.key}>
+          <TouchableOpacity onPress={() => navigation.navigate(button.screen)}>
+            <Image source={button.icon} style={styles.image} />
+          </TouchableOpacity>
+        </View>
+      ))}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    button: {
-        backgroundColor: themeColors.primary,
-        padding: 10,
-        borderRadius: 20,
-    },
-    text: {
-        color: "white",
-        fontSize: 25,
-        textAlign: 'center',
-    },
+  iconRow: {
+    paddingTop: 10,
+    flexDirection: 'row',
+    padding: 10,
+  },
+  box: {
+    borderRadius: 15,
+    backgroundColor: themeColors.primary,
+    padding: 5,
+    marginHorizontal: 5,
+  },
+  image: {
+    width: 40,
+    height: 40,
+  },
 });
 
-export default Button;
+export default CustomButton;
