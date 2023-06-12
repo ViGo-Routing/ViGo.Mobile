@@ -12,7 +12,7 @@ const MyRouteScreen = () => {
       <View style={styles.footer}><Header title="Hành trình" /></View>
       <View style={styles.body}>
         <View style={styles.tabContainer}>
-          {['Đang đi', 'Lịch sử', 'Đặt trước'].map(tab => (
+          {['Đang đi', 'Đang đợi', 'Lịch sử', 'Đặt trước'].map(tab => (
             <Text
               key={tab}
               style={[styles.tab, selectedTab === tab && styles.selectedTab]}

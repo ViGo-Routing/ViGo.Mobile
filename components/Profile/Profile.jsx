@@ -30,19 +30,19 @@ const Profile = () => {
       <View style={styles.inputContainer}>
         <Text style={styles.inputTitle}>Họ và Tên</Text>
         <View style={styles.inputBorder}>
-          <TextInput style={styles.input} />
+          <TextInput placeholder="Trần Gia Hoàng" style={styles.input} />
         </View>
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.inputTitle}>Số điện thoại</Text>
         <View style={styles.inputBorder}>
-          <TextInput style={styles.input} />
+          <TextInput placeholder="+84909685971" style={styles.input} />
         </View>
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.inputTitle}>Email</Text>
         <View style={styles.inputBorder}>
-          <TextInput style={styles.input} />
+          <TextInput placeholder="hoangtgse140280@fpt.edu.vn" style={styles.input} />
         </View>
       </View>
     </View>

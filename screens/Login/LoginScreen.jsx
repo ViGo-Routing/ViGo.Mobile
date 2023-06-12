@@ -46,16 +46,16 @@ export default function LoginScreen() {
           autoCompleteType='tel'
           keyboardType='phone-pad'
         />
-        <TouchableOpacity style={styles.button} onPress={sendVerification}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
         {/* <Text style={styles.link}>
           Quên mật khẩu?
         </Text> */}
-        <FirebaseRecaptchaVerifierModal
+        {/* <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
-        />
+        /> */}
         {/* <Text style={styles.registerText}>
           Bạn chưa có tài khoản?{' '}
           <TouchableOpacity onPress={() => navigation.navigate('Registration')}>

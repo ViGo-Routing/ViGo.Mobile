@@ -19,6 +19,9 @@ import LoginSuccessScreen from '../screens/Welcome/WelcomeLoginScreen';
 import ConfirmCodeScreen from '../screens/Login/ConfirmCode';
 import BikeBookingScreen from '../screens/Booking/BikeBookingScreen';
 import CarBookingScreen from '../screens/Booking/CarBookingScreen';
+import BikeSettingSchedule from '../screens/Schedule/BikeSettingSchedule';
+import CarSettingSchedule from '../screens/Schedule/CarSettingSchedule';
+import BookingDetailScreen from '../screens/Booking/BookingDetailScreen';
 
 
 
@@ -44,6 +47,9 @@ export default function AppNavigation() {
         <Stack.Screen name="EditProfile" options={{ headerShown: false }} component={EditProfileScreen} />
         <Stack.Screen name="BikeBooking" options={{ headerShown: false }} component={BikeBookingScreen} />
         <Stack.Screen name="CarBooking" options={{ headerShown: false }} component={CarBookingScreen} />
+        <Stack.Screen name="BikeSettingSchedule" options={{ headerShown: false }} component={BikeSettingSchedule} />
+        <Stack.Screen name="CarSettingSchedule" options={{ headerShown: false }} component={CarSettingSchedule} />
+        <Stack.Screen name="BookingDetail" options={{ headerShown: false }} component={BookingDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
