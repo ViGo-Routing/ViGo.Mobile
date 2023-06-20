@@ -4,63 +4,56 @@ import MapView, { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 
 const Map = () => {
-    const [region, setRegion] = useState({
-        latitude: 10.762622,
-        longitude: 106.660172,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    });
+  const [region, setRegion] = useState({
+    latitude: 10.762622,
+    longitude: 106.660172,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
 
-    useEffect(() => {
-        const requestLocationPermission = async () => {
-            if (Platform.OS === 'android') {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                    {
-                        title: 'Location Permission',
-                        message: 'This app needs access to your location',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
-                    },
-                );
-                return granted === PermissionsAndroid.RESULTS.GRANTED;
-            } else {
-                return Geolocation.requestAuthorization('whenInUse');
-            }
-        };
+  useEffect(() => {
+    fetch('https://vigo-api.azurewebsites.net/swagger/v1/swagger.json')
+      .then(response => response.json())
+      .then(data => {
+        const stationPath = data.paths['/api/Station/{stationId}'];
+        console.log(stationPath);
+      })
+      .catch(error => {
+        // Handle errors
+        console.error(error);
+      });
+  }, []);
 
-        const getCurrentLocation = async () => {
-            const hasLocationPermission = await requestLocationPermission();
-            if (hasLocationPermission) {
-                Geolocation.getCurrentPosition(
-                    position => {
-                        setRegion({
-                            ...region,
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                        });
-                    },
-                    error => console.log(error),
-                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-                );
-            }
-        };
+  const stationId = '';
+  // const requestBody = {
+  //   longitude: 0,
+  //   latitude: 0,
+  //   name: 'string',
+  //   address: 'string',
+  //   stationIndex: 0
+  // };
+  fetch(`/api/Station/${stationId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // body: JSON.stringify(requestBody)
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
 
-        getCurrentLocation();
-    }, []);
-
-    return (
-        <MapView style={styles.map} region={region}>
-            <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
-        </MapView>
-    );
+  return (
+    <MapView style={styles.map} region={region}>
+      <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
+    </MapView>
+  );
 };
 
 const styles = StyleSheet.create({
-    map: {
-        ...StyleSheet.absoluteFillObject,
-    },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
 });
 
 export default Map;

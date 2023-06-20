@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import Header from '../../components/Header/Header.jsx';
 import Map from '../../components/Map/Map.jsx';
-import BottomSheet from '../../components/Bottom Sheet/BottomSheetComponent.jsx';
+import BottomSheet from '../../components/BottomSheet/BottomSheetComponent.jsx';
 import { themeColors } from '../../assets/theme/index.jsx';
 
 const BikeBookingScreen = () => {
@@ -16,7 +16,7 @@ const BikeBookingScreen = () => {
       <View style={styles.body}>
         <Map />
       </View>
-      <Button style={{color: themeColors.primary}} title="Tìm kiếm vị trí của bạn nào" onPress={() => setVisible(true)} />
+       <Button style={{color: themeColors.primary}} title="Tìm kiếm vị trí của bạn nào" onPress={() => setVisible(true)} /> 
       <View style={styles.footer}>
         <BottomSheet visible={visible} onClose={() => setVisible(false)} />
       </View>
@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
   },
+  footer: {
+    marginTop:10,
+  }
 });
 
 export default BikeBookingScreen;
