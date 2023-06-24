@@ -6,10 +6,15 @@ import { themeColors } from '../../assets/theme/index.jsx';
 import InputCard from '../../components/Card/InputCard.jsx';
 import TimeCard from '../../components/Card/TimeCard.jsx';
 import SelectDailyRoute from '../../components/Card/SelectDailyRoute.jsx';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const BikeSettingSchedule = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  // const { sendData } = route.params;
+  // const data = { key: sendData };
+  // console.log("response", sendData)
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,7 +22,7 @@ const BikeSettingSchedule = () => {
       </View>
       <ScrollView style={styles.body}>
         <View style={styles.card}>
-          <InputCard />
+          <InputCard data={data} />
         </View>
         <View style={styles.calen}>
           <CalendarCard />
@@ -30,7 +35,7 @@ const BikeSettingSchedule = () => {
           /> */}
         </View>
         <View style={styles.sdr}>
-          <SelectDailyRoute />
+          <SelectDailyRoute data={dataRoutine} />
         </View>
         <View style={styles.footer}>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BookingDetail')}>

@@ -3,6 +3,7 @@ import apiManager from "./apiManager";
 
 //AUTHENTICATION
 //LOGIN
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjVmOTRkZDg2LTM3YjItNDNhMy05NjJiLTAzNmEzYzAzZDNjOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFETUlOIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYWRtaW5AZ21haWwuY29tIiwianRpIjoiZGRhY2MyNGUtNWUxNS00NTFiLWE2NzQtY2U2YjAxZTM1YTY1IiwiZXhwIjoxNjg3NDYwMTQ0LCJpc3MiOiJodHRwczovL3ZpZ28tYXBpLmF6dXJld2Vic2l0ZXMubmV0LyIsImF1ZCI6Imh0dHBzOi8vdmlnby1hcGkuYXp1cmV3ZWJzaXRlcy5uZXQvIn0.xlsDLG_lVN-eogmHPjx50ZjqTNj0DXv_H9hAhzqjMnY';
 export const user_login = async data => {
     try {
         const result = await apiManager("/api/Authenticate/Mobile/Login", {
@@ -12,6 +13,7 @@ export const user_login = async data => {
             },
             data: data,
         });
+        console.log("result", result)
         return result;
     } catch (error) {
         return error.response.data;
@@ -188,11 +190,14 @@ export const route_create = async data => {
         const result = await apiManager("/api/Route", {
             method: "POST",
             headers: {
+                Authorization: `Bearer ${token}`,
                 'content-type': 'application/json-patch+json'
             },
             data: data,
         });
+        console.log("API response:", result);
         return result;
+
     } catch (error) {
         return error.response.data
     }

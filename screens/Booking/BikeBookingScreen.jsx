@@ -7,25 +7,40 @@ import { themeColors } from '../../assets/theme/index.jsx';
 
 const BikeBookingScreen = () => {
   const [visible, setVisible] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
+  const [pickupPosition, setPickupPosition] = useState(null);
+  const [destinationPosition, setDestinationPosition] = useState(null);
+  const handlePlaceSelection = (details) => {
+    console.log("Father detail", details);
+    setSelectedPlace(details);
+    // Do something with the selected place details in the father component
+  };
+  const handlePickupPlaceSelection = (details) => {
+    setPickupPosition(details);
+  };
+
+  const handleDestinationPlaceSelection = (details) => {
+    setDestinationPosition(details);
+  };
   return (
     <View style={styles.container}>
       <View >
         <Header style={styles.header} title="Xe Máy" />
       </View>
       <View style={styles.body}>
-        <Map />
+        <Map pickupPositionDetail={pickupPosition} destinationPositionDetail={destinationPosition} />
       </View>
-       <Button style={{color: themeColors.primary}} title="Tìm kiếm vị trí của bạn nào" onPress={() => setVisible(true)} /> 
+      <Button style={{ color: themeColors.primary }} title="Tìm kiếm vị trí của bạn nào" onPress={() => setVisible(true)} />
       <View style={styles.footer}>
-        <BottomSheet visible={visible} onClose={() => setVisible(false)} />
+        <BottomSheet onPickupPlaceSelect={handlePickupPlaceSelection} onDestinationPlaceSelect={handleDestinationPlaceSelection} visible={visible} onClose={() => setVisible(false)} />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  
+
   container: {
     flexDirection: 'column', // inner items will be added vertically
     flexGrow: 1, // all the available vertical space will be occupied by it
@@ -35,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   footer: {
-    marginTop:10,
+    marginTop: 10,
   }
 });
 

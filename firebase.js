@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth } from "firebase/auth";
 import firebase from 'firebase/compat';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -14,7 +15,10 @@ export const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-if (!firebase.apps.length) {
+const auth = getAuth(app);
+console.log(auth);
+const currentUser = auth.apiKey;
+console.log("Current User:", currentUser);
+if (!firebase.app.length) {
     firebase.initializeApp(firebaseConfig);
-  }
+}

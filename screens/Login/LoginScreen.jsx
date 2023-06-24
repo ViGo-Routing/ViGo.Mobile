@@ -10,64 +10,88 @@ import { themeColors } from '../../assets/theme';
 // import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import firebase from 'firebase/compat/app';
 import firebaseConfig from "../../firebase.js"
+import { getAuth, signInWithPhoneNumber } from "firebase/auth";
+import axios from 'axios';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const auth = getAuth();
 
+  console.log(auth)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [vertificationId, setVertificationId] = useState(null);
+  const [verificationCode, setVerificationCode] = useState('');
+
   // const recaptchaVerifier = useRef(null);
   // const firebaseToken = await firebase.auth().currentUser.getIdToken(true);
   const [firebaseToken, setFirebaseToken] = useState(null);
   useEffect(() => {
     const getToken = async () => {
-      // Check if there is a currently signed-in user
-      if (firebase.auth().currentUser) {
-        const token = await firebase.auth().currentUser.getIdToken(true);
+      if (auth.currentUser) {
+        const token = await auth.apiKey;
         setFirebaseToken(token);
-      } else {
-        // Handle the case where there is no currently signed-in user
       }
     };
     getToken();
   }, []);
 
+  // const handleSendCode = async () => {
+
+  //   const auth = getAuth();
+  //   console.log("ssssss", auth + phoneNumber)
+  //   const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber);
+  //   console.log("ssssss", confirmationResult)
+  //   setVerificationCode(confirmationResult)
+  //   // Save the confirmationResult for later use
+  //   // e.g., in handleVerifyCode function
+
+  // };
+
+  const handleVerifyCode = async () => {
+    try {
+
+      console.log('Phone number successfully verified!');
+      // User is now signed in
+    } catch (error) {
+      console.log('Error verifying verification code:', error);
+    }
+  };
+
   const sendVerification = async () => {
     try {
+      const auth = getAuth();
+      //const credential = await signInWithPhoneNumber(auth, confirmationResult.verificationId, verificationCode);
+      //console("credential", credential)
       // Check if there is a currently signed-in user
       try {
         console.log(phoneNumber);
-        if (firebase.auth().currentUser) {
-          // Retrieve the Firebase token
-          const firebaseToken = await firebase.auth().currentUser.getIdToken(true);
-          console.log(firebaseToken); // Log the value of firebaseToken
-        } else {
-          console.log('No currently signed-in user'); // Log a message indicating that there is no currently signed-in user
-        }
+        // if (auth.currentUser) {
+        // Retrieve the Firebase token
+
+        const headers = {
+          'Content-Type': 'application/json-patch+json',
+        };
+
+        // Set the request body
+        const requestData = {
+          phone: phoneNumber,
+          firebaseToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkMDNhZTdmNDczZjJjNmIyNTI3NmMwNjM2MGViOTk4ODdlMjNhYTkiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiVGh14bqtbiBMw6oiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmlnby1hNzc1NCIsImF1ZCI6InZpZ28tYTc3NTQiLCJhdXRoX3RpbWUiOjE2ODc1MDgwMjcsInVzZXJfaWQiOiJKcDNnb0JCS0VXUnV4RURLNDBXZVoxR0VkbnQyIiwic3ViIjoiSnAzZ29CQktFV1J1eEVESzQwV2VaMUdFZG50MiIsImlhdCI6MTY4NzUwODAyNywiZXhwIjoxNjg3NTExNjI3LCJwaG9uZV9udW1iZXIiOiIrODQ5Mzc1MDEwMTkiLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7InBob25lIjpbIis4NDkzNzUwMTAxOSJdfSwic2lnbl9pbl9wcm92aWRlciI6ImN1c3RvbSJ9fQ.htUx4GFxzotfuvrR-DEJUtebCjd1LZ01rMpLLKQ8h0X-LjyG2HZtv68FQk-0kO1SFJI-5iXs5YSURq7uxA5rdL2pnLK5qO_JDOcvkno42Jl71fxAdKt_X0eXXqCCI6IAXFaHIntwXLtU_rrGYWgsAKqz3es7oMGjAM9DX14OeVV2p0hfbu7DsreR5IGG8dzQLgjzTjeSBKlH4XYBL2JSEhAQlZxe25lFhqMyQ3kcjLYXuhfRa4skFzFkfaiK5TDgIRB3G2bH-7Vk0IX5E61fq4FckoF0hRNphYZR_1ovFq6SqqKEy9hVDyNAC-D2AJy6aaBT5ijcVad_p4e-czO9-A',
+        };
+        console.log(requestData)
+        // Make the API request using Axios
+        const response = await axios.post('https://vigo-api.azurewebsites.net/api/Authenticate/Mobile/Login', requestData, { headers });
+        console.log("dataaaaaa", response.data); // Log the response data
+
+        // Handle successful login
+        navigation.navigate('Home');
+        // } else {
+        //   console.log('No currently signed-in user'); // Log a message indicating that there is no currently signed-in user
+        // }
       } catch (error) {
         console.error('An error occurred while retrieving the Firebase token:', error);
       }
 
-      
-      if (firebase.auth().currentUser) {
-        // Retrieve the Firebase token
-        const firebaseToken = await firebase.auth().currentUser.getIdToken(true);
-        // Create a Swagger instance with the URL of your API
-        const api = await Swagger('https://vigo-api.azurewebsites.net/swagger/v1/swagger.json');
-        // Call the login endpoint with the provided phone number and firebase token
-        const response = await api.apis.authrentication.login({ phone: phoneNumber, firebaseToken });
-        console.log(response); // Log the value of response
-        if (response.error) {
-          console.error('An error occurred while calling the login endpoint:', response.error);
-        } else {
-          // Store response data
-        }
-        // Handle successful login
-        navigation.navigate('Home');
-      } else {
-        // Handle the case where there is no currently signed-in user
-      }
     } catch (error) {
       console.error('An error occurred while retrieving the Firebase token:', error);
     }
@@ -89,8 +113,17 @@ export default function LoginScreen() {
           autoCompleteType='tel'
           keyboardType='phone-pad'
         />
+        {/* <TextInput
+          style={styles.input}
+          onChangeText={setVertificationId}
+          placeholder='Verify Code'
+          keyboardType='phone-pad'
+        /> */}
         {/* <TouchableOpacity style={styles.button} onPress={sendVerification}> */}
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleSendCode}>
+          <Text style={styles.buttonText}>Mã xác thực</Text>
+        </TouchableOpacity> */}
+        <TouchableOpacity style={styles.button} onPress={sendVerification}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
       </View>
