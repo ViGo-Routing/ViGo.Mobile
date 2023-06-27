@@ -1,24 +1,27 @@
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
 // IMPORT COMPONENTS
 import Header from '../../components/Header/Header.jsx'
 import CustomButton from '../../components/Button/CustomButton.jsx'
 import Profile from '../../components/Profile/Profile.jsx'
+import { useNavigation } from '@react-navigation/native'
+import { themeColors } from '../../assets/theme/index.jsx'
 
 const EditProfileScreen = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <View style={styles.footer}><Header title="Chỉnh sửa hồ sơ" /></View>
+      <View style={styles.header}>
+        <Header title="Chỉnh sửa hồ sơ" />
+      </View>
       <View style={styles.body}>
         <Profile />
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            style={styles.btn}
-            title="Cập nhật"
-          // onPress={() => navigation.navigate('Details')}
-          />
-        </View>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BookingDetail')}>
+          <Text style={{ color: "white", fontWeight: "bold" }}>Cập nhật</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -26,17 +29,28 @@ const EditProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column', // inner items will be added vertically
-    flexGrow: 1,            // all the available vertical space will be occupied by it
-    justifyContent: 'space-between' // will create the gutter between body and footer
+    flexDirection: 'column',
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
   body: {
     paddingTop: 30,
     flex: 1,
+    backgroundColor: "white"
   },
   buttonContainer: {
     padding: 16,
     paddingTop: 225,
+  },
+  footer: {
+    padding: 10,
+  },
+  button: {
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+    backgroundColor: themeColors.primary,
+    alignItems: "center",
   },
 });
 

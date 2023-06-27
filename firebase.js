@@ -1,4 +1,6 @@
-import firebase from 'firebase/compat/app';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from "firebase/auth";
+import firebase from 'firebase/compat';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
@@ -12,6 +14,13 @@ export const firebaseConfig = {
     measurementId: "G-SHSW73MTC8"
 };
 
-if (!firebase.apps.length){
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+console.log(auth);
+const currentUser = auth.apiKey;
+console.log("Current User:", currentUser);
+
+if (!firebase.apps.length) {
+    console.log("aaaaaaa")
     firebase.initializeApp(firebaseConfig);
 }

@@ -1,16 +1,22 @@
 import React from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
-import {ViewPropTypes} from 'deprecated-react-native-prop-types'
 import { themeColors } from '../../assets/theme/index.jsx'
 import { useNavigation } from '@react-navigation/native'
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 // IMPORT COMPONENTS
 import BottomNavigationBar from '../../components/NavBar/BottomNavigationBar.jsx'
 import HomeHeader from '../../components/Header/HomeHeader.jsx'
 import CustomButton from '../../components/Button/CustomButton.jsx'
 import PromotionCardSwiper from '../../components/Card/PromotionCardSwiper.jsx'
+import { getAuth } from 'firebase/auth';
 
 
 const HomeScreen = () => {
+  const auth = getAuth();
+  console.log(auth)
+  HomeScreen.propTypes = {
+    myProp: ViewPropTypes.style, // Ví dụ sử dụng ViewPropTypes với style prop
+  };
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
