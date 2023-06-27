@@ -19,6 +19,8 @@ const auth = getAuth(app);
 console.log(auth);
 const currentUser = auth.apiKey;
 console.log("Current User:", currentUser);
-if (!firebase.app.length) {
+
+if (!firebase.apps.length) {
+    console.log("aaaaaaa")
     firebase.initializeApp(firebaseConfig);
 }

@@ -22,7 +22,7 @@ const BikeSettingSchedule = () => {
       </View>
       <ScrollView style={styles.body}>
         <View style={styles.card}>
-          <InputCard data={data} />
+          <InputCard />
         </View>
         <View style={styles.calen}>
           <CalendarCard />
@@ -35,7 +35,7 @@ const BikeSettingSchedule = () => {
           /> */}
         </View>
         <View style={styles.sdr}>
-          <SelectDailyRoute data={dataRoutine} />
+          <SelectDailyRoute />
         </View>
         <View style={styles.footer}>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BookingDetail')}>

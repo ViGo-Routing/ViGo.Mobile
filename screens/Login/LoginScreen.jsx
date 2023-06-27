@@ -1,102 +1,69 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { React, useState, useRef } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Swagger from 'swagger-react-native-client';
-
 // IMPORT THEME
 import { themeColors } from '../../assets/theme';
+import { login } from '../../utils/apiManager';
 
 // IMPORT FIREBASE 
-// import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { firebaseConfig } from '../../firebase.js';
 import firebase from 'firebase/compat/app';
-import firebaseConfig from "../../firebase.js"
-import { getAuth, signInWithPhoneNumber } from "firebase/auth";
-import axios from 'axios';
 
 export default function LoginScreen() {
-  const navigation = useNavigation();
-  const auth = getAuth();
-
-  console.log(auth)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [vertificationId, setVertificationId] = useState(null);
-  const [verificationCode, setVerificationCode] = useState('');
+  const recaptchaVerifier = useRef(null);
 
-  // const recaptchaVerifier = useRef(null);
-  // const firebaseToken = await firebase.auth().currentUser.getIdToken(true);
-  const [firebaseToken, setFirebaseToken] = useState(null);
-  useEffect(() => {
-    const getToken = async () => {
-      if (auth.currentUser) {
-        const token = await auth.apiKey;
-        setFirebaseToken(token);
-      }
-    };
-    getToken();
-  }, []);
-
-  // const handleSendCode = async () => {
-
-  //   const auth = getAuth();
-  //   console.log("ssssss", auth + phoneNumber)
-  //   const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber);
-  //   console.log("ssssss", confirmationResult)
-  //   setVerificationCode(confirmationResult)
-  //   // Save the confirmationResult for later use
-  //   // e.g., in handleVerifyCode function
-
-  // };
-
-  const handleVerifyCode = async () => {
-    try {
-
-      console.log('Phone number successfully verified!');
-      // User is now signed in
-    } catch (error) {
-      console.log('Error verifying verification code:', error);
-    }
+  const sendVerification = () => {
+    // const phoneProvider = new firebase.auth.PhoneAuthProvider();
+    // phoneProvider
+    //   .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
+    //   .then(setVertificationId);
+    // // .then.navigation.navigate('ConFirmCode');
+    login("phoneNumber", "token").then(() => {
+      navigation.navigate('Home')
+    });
   };
 
-  const sendVerification = async () => {
-    try {
-      const auth = getAuth();
-      //const credential = await signInWithPhoneNumber(auth, confirmationResult.verificationId, verificationCode);
-      //console("credential", credential)
-      // Check if there is a currently signed-in user
-      try {
-        console.log(phoneNumber);
-        // if (auth.currentUser) {
-        // Retrieve the Firebase token
+  const confirmCode = () => {
 
-        const headers = {
-          'Content-Type': 'application/json-patch+json',
-        };
+    console.log('phoneNumber', phoneNumber)
+    const credential = firebase.auth.PhoneAuthProvider.credential(
+      vertificationId,
+      code
+    );
+    firebase.auth().signInWithCredential(credential)
+      .then(() => {
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            setCode('');
+            user.getIdToken().then(token => {
+              login(phoneNumber, token);
+            });
+          }
+        });
 
-        // Set the request body
-        const requestData = {
-          phone: phoneNumber,
-          firebaseToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkMDNhZTdmNDczZjJjNmIyNTI3NmMwNjM2MGViOTk4ODdlMjNhYTkiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiVGh14bqtbiBMw6oiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmlnby1hNzc1NCIsImF1ZCI6InZpZ28tYTc3NTQiLCJhdXRoX3RpbWUiOjE2ODc1MDgwMjcsInVzZXJfaWQiOiJKcDNnb0JCS0VXUnV4RURLNDBXZVoxR0VkbnQyIiwic3ViIjoiSnAzZ29CQktFV1J1eEVESzQwV2VaMUdFZG50MiIsImlhdCI6MTY4NzUwODAyNywiZXhwIjoxNjg3NTExNjI3LCJwaG9uZV9udW1iZXIiOiIrODQ5Mzc1MDEwMTkiLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7InBob25lIjpbIis4NDkzNzUwMTAxOSJdfSwic2lnbl9pbl9wcm92aWRlciI6ImN1c3RvbSJ9fQ.htUx4GFxzotfuvrR-DEJUtebCjd1LZ01rMpLLKQ8h0X-LjyG2HZtv68FQk-0kO1SFJI-5iXs5YSURq7uxA5rdL2pnLK5qO_JDOcvkno42Jl71fxAdKt_X0eXXqCCI6IAXFaHIntwXLtU_rrGYWgsAKqz3es7oMGjAM9DX14OeVV2p0hfbu7DsreR5IGG8dzQLgjzTjeSBKlH4XYBL2JSEhAQlZxe25lFhqMyQ3kcjLYXuhfRa4skFzFkfaiK5TDgIRB3G2bH-7Vk0IX5E61fq4FckoF0hRNphYZR_1ovFq6SqqKEy9hVDyNAC-D2AJy6aaBT5ijcVad_p4e-czO9-A',
-        };
-        console.log(requestData)
-        // Make the API request using Axios
-        const response = await axios.post('https://vigo-api.azurewebsites.net/api/Authenticate/Mobile/Login', requestData, { headers });
-        console.log("dataaaaaa", response.data); // Log the response data
+      })
+      .catch((error) => {
 
-        // Handle successful login
-        navigation.navigate('Home');
-        // } else {
-        //   console.log('No currently signed-in user'); // Log a message indicating that there is no currently signed-in user
-        // }
-      } catch (error) {
-        console.error('An error occurred while retrieving the Firebase token:', error);
-      }
+        alert(error);
+      })
+    Alert.alert(
 
-    } catch (error) {
-      console.error('An error occurred while retrieving the Firebase token:', error);
-    }
-  };
+      'Đăng nhập thành công! Hãy đặt chuyến xe đầu tiên của bạn nào',
+      '',
+      [
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('Home')
+        },
+      ]
+    );
+  }
 
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Image
@@ -112,20 +79,41 @@ export default function LoginScreen() {
           placeholder='+84'
           autoCompleteType='tel'
           keyboardType='phone-pad'
+        // textContentType='telephoneNumber'
+        // onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
         />
         {/* <TextInput
           style={styles.input}
-          onChangeText={setVertificationId}
-          placeholder='Verify Code'
-          keyboardType='phone-pad'
+          placeholder="Mật khẩu"
+          secureTextEntry={true}
         /> */}
-        {/* <TouchableOpacity style={styles.button} onPress={sendVerification}> */}
-        {/* <TouchableOpacity style={styles.button} onPress={handleSendCode}>
-          <Text style={styles.buttonText}>Mã xác thực</Text>
-        </TouchableOpacity> */}
+        <TextInput
+          style={styles.input}
+          placeholder='OTP Code'
+          onChangeText={setCode}
+          keyboardType='phone-pad'
+        />
         <TouchableOpacity style={styles.button} onPress={sendVerification}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={confirmCode}>
+          <Text style={styles.buttonText}>Nhập OTP</Text>
+        </TouchableOpacity>
+        <Text style={styles.link}>
+          Quên mật khẩu?
+        </Text>
+
+        <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifier}
+          firebaseConfig={firebaseConfig}
+        />
+
+        <Text style={styles.registerText}>
+          Bạn chưa có tài khoản?{' '}
+          <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
+            <Text style={styles.link}>Đăng ký</Text>
+          </TouchableOpacity>
+        </Text>
       </View>
     </View>
   );
@@ -172,23 +160,24 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: themeColors.primary,
-    marginTop: 10,
-    paddingHorizontal: 20,
-    borderRadius: 15,
-    justifyContent: 'center',
-    height: 50,
-    alignSelf: 'flex-end',
+    marginTop: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 100,
+    borderRadius: 20,
+    marginBottom: 10,
   },
   buttonText: {
     textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
   },
-  // registerText: {
-  //   fontSize: 16,
-  // },
-  // link: {
-  //   color: themeColors.primary,
-  //   fontSize: 16,
-  // },
+  registerText: {
+    fontSize: 16,
+  },
+  link: {
+    // textAlign:'center',
+    color: themeColors.primary,
+    fontSize: 16,
+    // textDecorationLine: 'underline',
+  },
 });
