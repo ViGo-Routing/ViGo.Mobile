@@ -6,7 +6,7 @@ import { themeColors } from '../../assets/theme';
 import { login } from '../../utils/apiManager';
 
 // IMPORT FIREBASE 
-import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+// import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { firebaseConfig } from '../../firebase.js';
 import firebase from 'firebase/compat/app';
 
@@ -14,7 +14,7 @@ export default function LoginScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [vertificationId, setVertificationId] = useState(null);
-  const recaptchaVerifier = useRef(null);
+  // const recaptchaVerifier = useRef(null);
 
   const sendVerification = () => {
     // const phoneProvider = new firebase.auth.PhoneAuthProvider();
@@ -103,10 +103,10 @@ export default function LoginScreen() {
           Quên mật khẩu?
         </Text>
 
-        <FirebaseRecaptchaVerifierModal
+        {/* <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
-        />
+        /> */}
 
         <Text style={styles.registerText}>
           Bạn chưa có tài khoản?{' '}
