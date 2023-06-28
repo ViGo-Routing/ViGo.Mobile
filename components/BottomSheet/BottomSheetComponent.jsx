@@ -25,45 +25,13 @@ const BottomSheet = ({ visible, onClose, onPickupPlaceSelect, onDestinationPlace
     onDestinationPlaceSelect(details);
     setDesSavedDetails(details);
   };
-  const handleCreateRoute = async () => {
-    try {
-      const requestData = {
-        name: "App Booking",
-        distance: 15,
-        duration: 15,
-        status: "ACTIVE",
-        routineType: "RANDOMLY",
-        routeType: "SPECIFIC_ROUTE_SPECIFIC_TIME",
-        startStation: {
-          longtitude: savedPickDetails.geometry.location.lng,
-          latitude: savedPickDetails.geometry.location.lat,
-          name: savedPickDetails.name,
-          address: savedPickDetails.formatted_address
-        },
-        endStation: {
-          longtitude: savedDesDetails.geometry.location.lng,
-          latitude: savedDesDetails.geometry.location.lat,
-          name: savedDesDetails.name,
-          address: savedDesDetails.formatted_address
-        }
-      };
-      console.log('requestData:', requestData);
-      const response = await createRoute(requestData);
-      console.log('API response:', response);
 
-      // Handle the response data accordingly
-      // ...
-    } catch (error) {
-      console.error('API error:', error);
-    }
-  };
-
-  const handleContinueButtonPress = () => {
+  const handleContinueButtonPress = (response) => {
     console.log(savedPickDetails)
 
     const requestData = {
       // Request body data
-      userId: "0d5b06bf-a443-4c3d-92b7-6f4f514863a8",
+
       name: "App Booking",
       distance: 15,
       duration: 15,
@@ -85,8 +53,10 @@ const BottomSheet = ({ visible, onClose, onPickupPlaceSelect, onDestinationPlace
     }
 
     console.log("send ", requestData)
-    const response = createRoute(requestData)
-    console.log("receive ", response)
+    response = createRoute(requestData)
+    if (response != null) {
+      navigation.navigate('BikeSettingSchedule');
+    }
   }
   return (
     <Modal
