@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, PermissionsAndroid } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import MapViewDirections from 'react-native-maps-directions';
 
 const Map = (pickupPosition, destinationPosition) => {
 
@@ -39,6 +40,10 @@ const Map = (pickupPosition, destinationPosition) => {
       }));
     }
   }, [destinationPosition]);
+  const handleDirectionsReady = (result) => {
+    console.log('Duration:', result.duration); // Duration in seconds
+    console.log('Distance:', result.distance); // Distance in meters
+  };
 
   // useEffect(() => {
   //   fetch('https://vigo-api.azurewebsites.net/api/Station/{stationId}')
@@ -72,36 +77,88 @@ const Map = (pickupPosition, destinationPosition) => {
     .catch(error => console.error(error));
 
   return (
-    <MapView style={styles.map} region={region}>
-      {pickupPosition.pickupPositionDetail && (
-        <Marker coordinate={{
-          latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-          longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
-        }} />
-      )}
-      {pickupPosition.destinationPositionDetail && (
-        <Marker coordinate={{
-          latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-          longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
-        }} />
-      )}
-      {pickupPosition.pickupPositionDetail && pickupPosition.destinationPositionDetail && (
-        <Polyline
-          coordinates={[
-            {
+    // <MapView style={styles.map} region={region}>
+    //   {pickupPosition.pickupPositionDetail && (
+    //     <Marker coordinate={{
+    //       latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
+    //       longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
+    //     }} />
+    //   )}
+    //   {pickupPosition.destinationPositionDetail && (
+    //     <Marker coordinate={{
+    //       latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
+    //       longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
+    //     }} />
+    //   )}
+    //   {pickupPosition.pickupPositionDetail && pickupPosition.destinationPositionDetail && (
+    //     <Polyline
+    //       coordinates={[
+    //         {
+    //           latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
+    //           longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
+    //         },
+    //         {
+    //           latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
+    //           longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
+    //         }
+    //       ]}
+    //       strokeColor="#FF0000"
+    //       strokeWidth={3}
+    //     />
+    //     // <MapViewDirections
+    //     //   origin={{
+    //     //     latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
+    //     //     longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
+    //     //   }}
+    //     //   destination={{
+    //     //     latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
+    //     //     longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
+    //     //   }}
+    //     //   apikey="AIzaSyCIYCycKF24mQXN1pJYFfCO-6azSETj_Qc"
+    //     //   strokeWidth={3}
+    //     //   strokeColor="blue"
+    //     //   mode="bicycling"
+    //     // />
+    //   )}
+
+    // </MapView>
+    <View style={{ flex: 1 }}>
+      <MapView style={{ flex: 1 }} region={region}>
+        {pickupPosition.pickupPositionDetail && (
+          <Marker
+            coordinate={{
               latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-              longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
-            },
-            {
+              longitude: pickupPosition.pickupPositionDetail.geometry.location.lng,
+            }}
+          />
+        )}
+        {pickupPosition.destinationPositionDetail && (
+          <Marker
+            coordinate={{
               latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-              longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
-            }
-          ]}
-          strokeColor="#FF0000"
-          strokeWidth={3}
-        />
-      )}
-    </MapView>
+              longitude: pickupPosition.destinationPositionDetail.geometry.location.lng,
+            }}
+          />
+        )}
+        {pickupPosition.pickupPositionDetail && pickupPosition.destinationPositionDetail && (
+          <MapViewDirections
+            origin={{
+              latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
+              longitude: pickupPosition.pickupPositionDetail.geometry.location.lng,
+            }}
+            destination={{
+              latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
+              longitude: pickupPosition.destinationPositionDetail.geometry.location.lng,
+            }}
+            apikey="AIzaSyCIYCycKF24mQXN1pJYFfCO-6azSETj_Qc"
+            strokeWidth={3}
+            strokeColor="#00A1A1"
+            mode="motobike"
+            onReady={handleDirectionsReady}
+          />
+        )}
+      </MapView>
+    </View>
   );
 };
 
