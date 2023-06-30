@@ -40,22 +40,16 @@ const Map = (pickupPosition, destinationPosition) => {
       }));
     }
   }, [destinationPosition]);
-  const handleDirectionsReady = (result) => {
+  const handleDirectionsReady = async  (result) => {
     console.log('Duration:', result.duration); // Duration in seconds
     console.log('Distance:', result.distance); // Distance in meters
+    setRouteInfo({ duration: result.duration, distance: result.distance });
+
+    const requestData = { duration: result.duration, distance: result.distance };
+    const response = await fareCalculate(requestData);
+    setApiResponse(response);
   };
 
-  // useEffect(() => {
-  //   fetch('https://vigo-api.azurewebsites.net/api/Station/{stationId}')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data);
-  //     })
-  //     .catch(error => {
-  //       // Handle errors
-  //       console.error(error);
-  //     });
-  // }, []);
 
   const stationId = '';
   // const requestBody = {
