@@ -5,22 +5,19 @@ import InputCard from "../../components/Card/InputCard.jsx";
 import { themeColors } from "../../assets/theme/index.jsx";
 import DetailCard from "../../components/Card/DetailCard";
 import { useNavigation } from "@react-navigation/native";
-import { fareCalculate } from "../../service/fareCalculate.jsx";
+import { createFareCalculate } from "../../service/bookingService.jsx";
 
 const BookingDetailScreen = () => {
-  const navigation = useNavigation();
   const [fareCalculation, setFareCalculation] = useState(null);
 
   useEffect(() => {
-    fareCalculate(requestData).then((responseData) => {
-      setFareCalculation(responseData);
-    });
+    const fetchData = async () => {
+      const response = await createFareCalculate(requestData);
+      setFareCalculation(response);
+    };
+    fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log("FareCaculated:", fareCalculation);
-  }, [fareCalculation]);
-
+  
   return (
     <View style={styles.container}>
       <View>

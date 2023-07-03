@@ -2,14 +2,13 @@ import apiManager from "../utils/apiManager";
 
 export const createFareCalculate = async requestData => {
     try {
-        const response = await apiManager.post('/api/Booking/FareCalculate', requestData);
-        return response;
-
+        console.log(requestData)
+        const response = await apiManager.post('/api/Booking/FareCalculate', requestData)
+        return response.data; 
     } catch (error) {
-        console.error('Create Booking FareCalculate failed:', error);
+        console.error("Fail to create booking calculate fare", error);
     }
 }
-
 
 export const createBooking = async requestData => {
     try {
