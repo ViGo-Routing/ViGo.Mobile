@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-import Header from '../../components/Header/Header.jsx';
-import InputCard from '../../components/Card/InputCard.jsx';
-import { themeColors } from '../../assets/theme/index.jsx';
-import DetailCard from '../../components/Card/DetailCard';
-import { useNavigation } from '@react-navigation/native';
-
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
+import Header from "../../components/Header/Header.jsx";
+import InputCard from "../../components/Card/InputCard.jsx";
+import { themeColors } from "../../assets/theme/index.jsx";
+import DetailCard from "../../components/Card/DetailCard";
+import { useNavigation } from "@react-navigation/native";
+import { fareCalculate } from "../../service/fareCalculate.jsx";
 
 const BookingDetailScreen = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const [fareCalculation, setFareCalculation] = useState(null);
+
+  useEffect(() => {
+    fareCalculate(requestData).then((responseData) => {
+      setFareCalculation(responseData);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("FareCaculated:", fareCalculation);
+  }, [fareCalculation]);
 
   return (
     <View style={styles.container}>
-      <View >
+      <View>
         <Header style={styles.header} title="Chi tiết" />
       </View>
       <View style={styles.body}>
@@ -30,10 +40,10 @@ const BookingDetailScreen = () => {
         </View>
         <View style={styles.payment}>
           <Text style={styles.Title}>Thanh Toán</Text>
-          <DetailCard title="Giá mỗi chuyến" info="120,000 VND" />
-          <DetailCard title="Số lần lặp" info="2 / Tháng" />
+          <DetailCard title="Giá gốc" info={fareCalculation?.originalFare} />
+          <DetailCard title="Phụ phí" info={fareCalculation?.additionalFare} />
           <DetailCard title="Mã giảm giá" info="12,000 VND" />
-          <DetailCard title="Tổng tiền" info="108,000 VND" />
+          <DetailCard title="Tổng tiền" info={fareCalculation?.finalFare} />
         </View>
       </View>
       <View style={styles.footer}>
@@ -41,24 +51,24 @@ const BookingDetailScreen = () => {
           style={styles.button}
           onPress={() => {
             Alert.alert(
-              'Hoàn Thành',
-              'Bàn vừa hoàn tất đặt chuyến xe định kì, hãy đợi chúng tôi tìm tài xế thích hợp cho bạn nhé!',
+              "Hoàn Thành",
+              "Bàn vừa hoàn tất đặt chuyến xe định kì, hãy đợi chúng tôi tìm tài xế thích hợp cho bạn nhé!",
               [
                 {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
                 },
                 {
-                  text: 'OK',
-                  onPress: () => navigation.navigate('MyRoute'),
+                  text: "OK",
+                  onPress: () => navigation.navigate("MyRoute"),
                 },
               ],
               { cancelable: false }
             );
           }}
         >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Tiếp tục</Text>
+          <Text style={{ color: "white", fontWeight: "bold" }}>Tiếp tục</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -72,13 +82,13 @@ const styles = StyleSheet.create({
   },
   Title: {
     fontSize: 25,
-    fontWeight: 'bold',
-    color: "gray"
+    fontWeight: "bold",
+    color: "gray",
   },
   container: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flexGrow: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   detail: {
     paddingTop: 10,
@@ -86,30 +96,23 @@ const styles = StyleSheet.create({
   },
   row: {
     marginHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   body: {
     flex: 1,
-    // backgroundColor: themeColors.linear,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   calen: {
     padding: 20,
   },
   card: {
-    marginTop: 10,
-    marginHorizontal: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
   },
   sdr: {
-    padding: 10
+    padding: 10,
   },
   button: {
     padding: 10,
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: 10,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
 });
 
