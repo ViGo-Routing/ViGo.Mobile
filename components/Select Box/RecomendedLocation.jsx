@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { getStation } from "../../service/stationService";
 
-const ReacommendedLocation = ({ title, items }) => {
+const RecommendedLocation = ({ title, items }) => {
   const [stations, setStations] = useState([]);
 
   const handleGetStations = () => {
@@ -23,7 +23,10 @@ const ReacommendedLocation = ({ title, items }) => {
         {items.map((item, index) => (
           <TouchableOpacity key={index} style={styles.listItem}>
             <Ionicons name={item.iconLeft} size={24} color="black" />
-            <Text style={styles.listItemText}>{item.text}</Text>
+            <View>
+              <Text style={styles.listItemText}>{item.text}</Text>
+              <Text style={styles.listItemAddress}>{item.address}</Text>
+            </View>
             <Ionicons name={item.iconRight} size={24} color="black" />
           </TouchableOpacity>
         ))}
@@ -31,7 +34,6 @@ const ReacommendedLocation = ({ title, items }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   card: {
     borderRadius: 15,
@@ -65,6 +67,10 @@ const styles = StyleSheet.create({
   listItemText: {
     flex: 1,
     marginHorizontal: 10,
+  },
+  listItemAddress: {
+    color: "#999",
+    fontSize: 12,
   },
 });
 

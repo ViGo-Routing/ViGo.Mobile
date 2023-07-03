@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SelectRouteHeader from "../../components/Header/SelectRouteHeader";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import InputCard from "../../components/Card/InputCard";
-import ReacommendedLocation from "../../components/Select Box/ReccomendedLocation";
+import RecommendedLocation from "../../components/Select Box/RecomendedLocation";
 import { themeColors } from "../../assets/theme";
 import { useNavigation } from "@react-navigation/native";
+import { getStation } from "../../service/stationService";
 
 const SelectRouteScreen = () => {
   const navigation = useNavigation();
+
+  const [stations, setStations] = useState([]);
+
+  useEffect(() => {
+    getStation({ PageNumber: 1, PageSize: 10 })
+      .then((response) => setStations(response.data))
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,15 +35,14 @@ const SelectRouteScreen = () => {
             
         </View> */}
         <View style={styles.card}>
-          <ReacommendedLocation
+          <RecommendedLocation
             title="Tuyến đường được đề xuất"
-            items={[
-              {
-                iconLeft: "time",
-                text: "FPT Ho Chi Minh Campus",
-                iconRight: "ios-arrow-forward",
-              },
-            ]}
+            items={stations.map((station) => ({
+              iconLeft: "time",
+              text: station.name,
+              address: station.address, // add this line
+              iconRight: "ios-arrow-forward",
+            }))}
           />
         </View>
       </View>
