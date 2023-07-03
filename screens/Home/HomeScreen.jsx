@@ -22,7 +22,7 @@ const HomeScreen = () => {
           buttons={[
             {
               key: 'bike',
-              screen: 'BikeBooking',
+              screen: 'SelectRoute',
               icon: require('../../assets/icons/vigobike.png'),
             },
             {
