@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { themeColors } from "../../assets/theme";
+import { getStation } from "../../service/stationService";
 
 const ReacommendedLocation = ({ title, items }) => {
+  const [stations, setStations] = useState([]);
+
+  const handleGetStations = () => {
+    getStation({ PageNumber: 1, PageSize: 10 })
+      .then((response) => setStations(response.data))
+      .catch((error) => console.error(error));
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>
-        <Ionicons
-          name="flame"
-          size={25}
-          color='orange'
-        />
+        <Ionicons name="flame" size={25} color="orange" />
         {title}
       </Text>
       <View style={styles.separator} />
