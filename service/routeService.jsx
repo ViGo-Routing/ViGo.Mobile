@@ -12,10 +12,10 @@ export const createRoute = async requestData => {
 }
 
 
-export const getRouteByUserId = async (requestData, id) => {
+export const getRouteByUserId = async () => {
     try {
-        console.log("requestData", requestData);
-        const response = await apiManager.get(`/api/Route/User/${id}`, requestData);
+
+        const response = await apiManager.get(`/api/Route/CurrentUser`);
         return response;
 
     } catch (error) {

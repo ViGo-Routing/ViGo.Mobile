@@ -1,4 +1,4 @@
-import { React, useState, useRef } from 'react';
+import { React, useState, useRef, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 // IMPORT THEME
@@ -9,22 +9,27 @@ import { login } from '../../utils/apiManager';
 // import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { firebaseConfig } from '../../firebase.js';
 import firebase from 'firebase/compat/app';
+import { UserContext } from '../../context/UserContext';
 
 export default function LoginScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [vertificationId, setVertificationId] = useState(null);
+  const { setUser } = useContext(UserContext);
   // const recaptchaVerifier = useRef(null);
 
-  const sendVerification = () => {
+  const sendVerification = async () => {
     // const phoneProvider = new firebase.auth.PhoneAuthProvider();
     // phoneProvider
     //   .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
     //   .then(setVertificationId);
     // // .then.navigation.navigate('ConFirmCode');
-    login("phoneNumber", "token").then(() => {
+    await login("phoneNumber", "token").then((response) => {
+      setUser(response.user)
       navigation.navigate('Home')
-    });
+      console.log("response.user", response.user)
+    })
+
   };
 
   const confirmCode = () => {

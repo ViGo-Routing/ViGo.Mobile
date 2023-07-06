@@ -15,15 +15,14 @@ const updateToken = newToken => {
 export const login = async (phone, firebaseToken) => {
     try {
         const requestData = {
-            firebaseToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkMDNhZTdmNDczZjJjNmIyNTI3NmMwNjM2MGViOTk4ODdlMjNhYTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmlnby1hNzc1NCIsImF1ZCI6InZpZ28tYTc3NTQiLCJhdXRoX3RpbWUiOjE2ODc4NzA3NjYsInVzZXJfaWQiOiJ2MzVzRWNOdE5GVmFmTHpVSGFDcVNtNHh2aUYyIiwic3ViIjoidjM1c0VjTnRORlZhZkx6VUhhQ3FTbTR4dmlGMiIsImlhdCI6MTY4Nzg3MDc2NiwiZXhwIjoxNjg3ODc0MzY2LCJwaG9uZV9udW1iZXIiOiIrODQzMzc3MDQ3NjgiLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7InBob25lIjpbIis4NDMzNzcwNDc2OCJdfSwic2lnbl9pbl9wcm92aWRlciI6ImN1c3RvbSJ9fQ.DGLxvHWHk9FkUY8UMT_5oh0RxXem89kK8eYPGwSJDosQTtqGhNlNhUDFtoF-LOU5w18x5Rq0uWztZBjDjgdKKh0PtWQujrTAodTwalUYv0844Fu07LateyrQ18NA_3bVd2mzUmKpwW6_FkvqRr-4vBQKhv9UCKdARrewk_OyjCud6jaHczI4htYQyJIcz7IV2MbwVd_Vwr0OZ2YsD7QyFcy1JFluDeqCCdUCrsPvWLjMi7s--KKE72ra1mGDqAX69IbggU9JESPBuELLybhRmyNhtO2t-MqM0W3I7ELs5KabY6D8RtlnQWgizapgZQTCG7wH4-7KfvnE6qggcAifQA',
+            firebaseToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImY5N2U3ZWVlY2YwMWM4MDhiZjRhYjkzOTczNDBiZmIyOTgyZTg0NzUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmlnby1hNzc1NCIsImF1ZCI6InZpZ28tYTc3NTQiLCJhdXRoX3RpbWUiOjE2ODg2MzMyOTIsInVzZXJfaWQiOiJ2MzVzRWNOdE5GVmFmTHpVSGFDcVNtNHh2aUYyIiwic3ViIjoidjM1c0VjTnRORlZhZkx6VUhhQ3FTbTR4dmlGMiIsImlhdCI6MTY4ODYzMzI5MiwiZXhwIjoxNjg4NjM2ODkyLCJwaG9uZV9udW1iZXIiOiIrODQzMzc3MDQ3NjgiLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7InBob25lIjpbIis4NDMzNzcwNDc2OCJdfSwic2lnbl9pbl9wcm92aWRlciI6ImN1c3RvbSJ9fQ.S9Gt0UWeo_D-JhArQRiU-TjDAz1CjEQuqHYSqcW_5clTQ45oDzkOTVbCxIhkVGJ98QvM5Pj8vdEyaWsE6R6okxFbSpieOOLpKOpN1ds6N1-o_46R3krkDDlT3HAS3NMDITTTJOZV_cybDCq1LhqMwNoHob8rT2gV13q7qfAO-ewWvWhlI4q2qC6iAra4kh_N2eVg1QqP0Q2Gni_Aa9VduagZP0pPFA7p459G5KcX4FBAWIlYbxYGm3bfSK6JBqNi6vU6FD8DHts7jf2tEvbn4VwgwH9z2h0ZAHOoKG6VcjzSyUTvH5RIjXVbq8Cuwt4Se3HYMFTQDdfe5wdb7whMKA',
             phone: '+84337704768'
         }
-        console.log('requestData', requestData)
         const response = await axios.post(`${baseURL}/api/Authenticate/Mobile/Login`, requestData);
-        console.log('response', response)
         const newToken = response.data.token;
         updateToken(newToken); // Update the token value
-        console.log('Login successful!', newToken);
+        console.log('Login successful!');
+        return response.data
     } catch (error) {
         console.error('Login failed:', error);
     }

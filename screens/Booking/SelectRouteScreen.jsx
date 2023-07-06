@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SelectRouteHeader from "../../components/Header/SelectRouteHeader";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import InputCard from "../../components/Card/InputCard";
@@ -6,16 +6,27 @@ import RecommendedLocation from "../../components/Select Box/RecomendedLocation"
 import { themeColors } from "../../assets/theme";
 import { useNavigation } from "@react-navigation/native";
 import { getStation } from "../../service/stationService";
+import { getRouteByUserId } from "../../service/routeService";
+import { UserContext } from "../../context/UserContext";
 
 const SelectRouteScreen = () => {
+  const { user } = useContext(UserContext);
   const navigation = useNavigation();
 
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
-    getStation({ PageNumber: 1, PageSize: 10 })
-      .then((response) => setStations(response.data))
-      .catch((error) => console.error(error));
+    const fetchData = async () => {
+      try {
+        const response = await getRouteByUserId();
+        console.log(response.data)// Call the getRouteByUserId function
+        setStations(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
