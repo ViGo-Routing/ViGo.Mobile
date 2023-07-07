@@ -55,7 +55,7 @@ const BikeBookingScreen = (props) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [pickupPosition, setPickupPosition] = useState(pickup);
   const [destinationPosition, setDestinationPosition] = useState(destination);
-
+  const [routeId, setRouteId] = useState('');
   const handlePlaceSelection = (details) => {
     console.log("Father detail", details);
     setSelectedPlace(details);
@@ -63,46 +63,20 @@ const BikeBookingScreen = (props) => {
   };
   const handlePickupPlaceSelection = (details) => {
     setPickupPosition(details);
-    console.log("pickup ne:", pickupPosition);
+
   };
 
   const handleDestinationPlaceSelection = (details) => {
     setDestinationPosition(details);
-    console.log("destination ne:", destinationPosition);
   };
-
-  const handleContinueButtonPress = (response) => {
-    console.log(savedPickDetails);
-
-    const requestData = {
-      // Request body data
-      name: "App Booking",
-      distance: 15,
-      duration: 15,
-      status: "ACTIVE",
-      routineType: "RANDOMLY",
-      routeType: "SPECIFIC_ROUTE_SPECIFIC_TIME",
-      startStation: {
-        longtitude: savedPickDetails.geometry.location.lng,
-        latitude: savedPickDetails.geometry.location.lat,
-        name: savedPickDetails.name,
-        address: savedPickDetails.formatted_address,
-      },
-      endStation: {
-        longtitude: savedDesDetails.geometry.location.lng,
-        latitude: savedDesDetails.geometry.location.lat,
-        name: savedDesDetails.name,
-        address: savedDesDetails.formatted_address,
-      },
-    };
-
-    console.log("send ", requestData);
-    response = createRoute(requestData);
-    if (response != null) {
-      navigation.navigate("BikeSettingSchedule");
-    }
+  const handleRouteId = (data) => {
+    console.log("handleRouteId:", data);
+    setRouteId(data);
   };
-
+  const sendRouteId = () => {
+    console.log("routeId" + routeId)
+    navigation.navigate("RoutineGenerator", { routeId: routeId });
+  }
   const slideUp = new Animated.Value(0);
   const slideUpHandler = () => {
     Animated.timing(slideUp, {
@@ -123,8 +97,9 @@ const BikeBookingScreen = (props) => {
     <View style={styles.container}>
       <View style={styles.body}>
         <Map
-          pickupPositionDetail={pickupPosition}
-          destinationPositionDetail={destinationPosition}
+          pickupPosition={pickupPosition}
+          destinationPosition={destinationPosition}
+          sendRouteId={handleRouteId}
         />
       </View>
       <View
@@ -229,7 +204,7 @@ const BikeBookingScreen = (props) => {
         >
           {/* <TouchableOpacity onPress={handleContinueButtonPress} style={styles.continueButton}> */}
           <TouchableOpacity
-            onPress={() => navigation.navigate("BookingDetail")}
+            onPress={sendRouteId}
             style={styles.continueButton}
           >
             <Text style={styles.continueButtonText}>Tiếp tục</Text>

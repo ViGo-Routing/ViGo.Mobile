@@ -6,18 +6,40 @@ import { themeColors } from "../../assets/theme/index.jsx";
 import DetailCard from "../../components/Card/DetailCard";
 import { useNavigation } from "@react-navigation/native";
 import { createFareCalculate } from "../../service/bookingService.jsx";
+import { getRouteById } from "../../service/routeService.jsx";
+import { getVehicleTypeById } from "../../service/vehicleTypeService.jsx";
 
-const BookingDetailScreen = () => {
+const BookingDetailScreen = ({ route }) => {
+  const { data } = route.params
   const [fareCalculation, setFareCalculation] = useState(null);
+  const [vehicle, setVehicle] = useState(null);
+  const [routeData, setRoute] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await createFareCalculate(requestData);
-      setFareCalculation(response);
+      await getRouteById(data[0].routeId).then((result) => {
+        const dataResponse = {
+          vehicleTypeId: "2788f072-56cd-4fa6-a51a-79e6f473bf9f",
+          beginTime: data[0].pickupTime,
+          distance: result.distance,
+          duration: result.duration,
+          totalNumberOfTickets: 0,
+          tripType: result.type,
+          routineType: "RANDOMLY",
+          roundTripBeginTime: data[0].pickupTime
+        }
+        setRoute(dataResponse)
+        console.log("sssssssssssssssss", dataResponse)
+        createFareCalculate(dataResponse).then((response) => setFareCalculation(response));
+        getVehicleTypeById(dataResponse.vehicleTypeId).then((response) => setVehicle(response));
+      });
+
     };
     fetchData();
   }, []);
-  
+
+
   return (
     <View style={styles.container}>
       <View>
@@ -29,11 +51,11 @@ const BookingDetailScreen = () => {
         </View>
         <View style={styles.detail}>
           <Text style={styles.Title}>Chuyến đi</Text>
-          <DetailCard title="Loại xe" info="ViRide" />
-          <DetailCard title="Loại Chuyến" info="Tháng" />
-          <DetailCard title="Ngày bắt đầu" info="06/09/2023" />
-          <DetailCard title="Ngày kết thúc" info="06/10/2023" />
-          <DetailCard title="Ngày đặt" info="01/09/2023" />
+          <DetailCard title="Loại xe" info={vehicle?.name} />
+          <DetailCard title="Loại Chuyến" info={routeData?.routineType === "RANDOMLY" ? "Tự do" : "Theo trạm"} />
+          <DetailCard title="Ngày bắt đầu" info={data[0]?.routineDate} />
+
+          <DetailCard title="Ngày đặt" info={data[0]?.createdTime} />
         </View>
         <View style={styles.payment}>
           <Text style={styles.Title}>Thanh Toán</Text>

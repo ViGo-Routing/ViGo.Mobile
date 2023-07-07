@@ -9,7 +9,7 @@ import { getStation } from "../../service/stationService";
 import { getRouteByUserId } from "../../service/routeService";
 import { UserContext } from "../../context/UserContext";
 
-const SelectRouteScreen = ({}) => {
+const SelectRouteScreen = ({ }) => {
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
 
@@ -36,7 +36,6 @@ const SelectRouteScreen = ({}) => {
     const fetchData = async () => {
       try {
         const response = await getRouteByUserId();
-        console.log(response.data); // Call the getRouteByUserId function
         setStations(response.data.data);
       } catch (error) {
         console.error(error);
@@ -45,7 +44,7 @@ const SelectRouteScreen = ({}) => {
 
     fetchData();
   }, []);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -75,7 +74,7 @@ const SelectRouteScreen = ({}) => {
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("BikeBooking", {pickupPosition: pickupPosition, destinationPosition: destinationPosition})}
+          onPress={() => navigation.navigate("BikeBooking", { pickupPosition: pickupPosition, destinationPosition: destinationPosition })}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>Tiếp tục</Text>
         </TouchableOpacity>

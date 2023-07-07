@@ -23,6 +23,7 @@ import CarSettingSchedule from "../screens/Schedule/CarSettingSchedule";
 import BookingDetailScreen from "../screens/Booking/BookingDetailScreen";
 import SelectRouteScreen from "../screens/Booking/SelectRouteScreen";
 import { UserProvider } from "../context/UserContext";
+import RoutineGenerator from "../screens/Booking/RoutineGeneratorScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -125,6 +126,11 @@ export default function AppNavigation() {
             name="SelectRoute"
             options={{ headerShown: false }}
             component={SelectRouteScreen}
+          />
+          <Stack.Screen
+            name="RoutineGenerator"
+            options={{ headerShown: false }}
+            component={RoutineGenerator}
           />
         </Stack.Navigator>
       </NavigationContainer>

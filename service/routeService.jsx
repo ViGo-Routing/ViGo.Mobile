@@ -8,10 +8,21 @@ export const createRoute = async requestData => {
 
     } catch (error) {
         console.error('Create Route failed:', error);
+        return null;
     }
 }
 
 
+export const getRouteById = async (id) => {
+    try {
+
+        const response = await apiManager.get(`/api/Route/${id}`);
+        return response;
+
+    } catch (error) {
+        console.error('Get Route By  Id failed:', error);
+    }
+}
 export const getRouteByUserId = async () => {
     try {
 

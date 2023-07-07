@@ -3,13 +3,10 @@ import { StyleSheet, View, PermissionsAndroid } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import MapViewDirections from 'react-native-maps-directions';
+import { createRoute } from '../../service/routeService';
+import { useNavigation } from '@react-navigation/native';
 
-const Map = (pickupPosition, destinationPosition) => {
-
-  useEffect(() => {
-    console.log('Child pickupPosition', pickupPosition);
-    console.log('Child destinationPosition', destinationPosition);
-  }, [pickupPosition, destinationPosition]);
+const Map = ({ pickupPosition, destinationPosition, sendRouteId }) => {
 
   const [region, setRegion] = useState({
     latitude: 10.762622,
@@ -18,8 +15,9 @@ const Map = (pickupPosition, destinationPosition) => {
     longitudeDelta: 0.0421,
   });
   useEffect(() => {
-    if (pickupPosition.pickupPositionDetail != null) {
-      const { location } = pickupPosition.pickupPositionDetail.geometry;
+    console.log("pickupPosition", pickupPosition)
+    if (pickupPosition != null) {
+      const { location } = pickupPosition.geometry;
       const { lat, lng } = location;
       setRegion(prevRegion => ({
         ...prevRegion,
@@ -30,8 +28,8 @@ const Map = (pickupPosition, destinationPosition) => {
   }, [pickupPosition]);
 
   useEffect(() => {
-    if (pickupPosition.destinationPositionDetail != null) {
-      const { location } = pickupPosition.destinationPositionDetail.geometry;
+    if (destinationPosition != null) {
+      const { location } = destinationPosition.geometry;
       const { lat, lng } = location;
       setRegion(prevRegion => ({
         ...prevRegion,
@@ -40,109 +38,68 @@ const Map = (pickupPosition, destinationPosition) => {
       }));
     }
   }, [destinationPosition]);
-  const handleDirectionsReady = async  (result) => {
-    console.log('Duration:', result.duration); // Duration in seconds
-    console.log('Distance:', result.distance); // Distance in meters
-    setRouteInfo({ duration: result.duration, distance: result.distance });
+  const handleDirectionsReady = async (result) => {
+    const requestData = {
+      // Request body data
+      name: `${pickupPosition.name} - ${destinationPosition.name}`,
+      distance: result.distance,
+      duration: result.duration,
+      status: "ACTIVE",
+      routineType: "RANDOMLY",
+      routeType: "SPECIFIC_ROUTE_SPECIFIC_TIME",
+      startStation: {
+        longtitude: pickupPosition.geometry.location.lng,
+        latitude: pickupPosition.geometry.location.lat,
+        name: pickupPosition.name,
+        address: pickupPosition.formatted_address,
+      },
+      endStation: {
+        longtitude: destinationPosition.geometry.location.lng,
+        latitude: destinationPosition.geometry.location.lat,
+        name: destinationPosition.name,
+        address: destinationPosition.formatted_address,
+      },
+    };
+    try {
+      const response = await createRoute(requestData)
+      console.log("response", response.data.id)
+      sendRouteId(response.data.id);
 
-    const requestData = { duration: result.duration, distance: result.distance };
-    const response = await fareCalculate(requestData);
-    setApiResponse(response);
+    } catch (error) {
+      console.log("Create Route Error ", error)
+    }
+
   };
 
-
-  const stationId = '';
-  // const requestBody = {
-  //   longitude: 0,
-  //   latitude: 0,
-  //   name: 'string',
-  //   address: 'string',
-  //   stationIndex: 0
-  // };
-  fetch(`/api/Station/${stationId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    // body: JSON.stringify(requestBody)
-  })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-
   return (
-    // <MapView style={styles.map} region={region}>
-    //   {pickupPosition.pickupPositionDetail && (
-    //     <Marker coordinate={{
-    //       latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-    //       longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
-    //     }} />
-    //   )}
-    //   {pickupPosition.destinationPositionDetail && (
-    //     <Marker coordinate={{
-    //       latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-    //       longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
-    //     }} />
-    //   )}
-    //   {pickupPosition.pickupPositionDetail && pickupPosition.destinationPositionDetail && (
-    //     <Polyline
-    //       coordinates={[
-    //         {
-    //           latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-    //           longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
-    //         },
-    //         {
-    //           latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-    //           longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
-    //         }
-    //       ]}
-    //       strokeColor="#FF0000"
-    //       strokeWidth={3}
-    //     />
-    //     // <MapViewDirections
-    //     //   origin={{
-    //     //     latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-    //     //     longitude: pickupPosition.pickupPositionDetail.geometry.location.lng
-    //     //   }}
-    //     //   destination={{
-    //     //     latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-    //     //     longitude: pickupPosition.destinationPositionDetail.geometry.location.lng
-    //     //   }}
-    //     //   apikey="AIzaSyCIYCycKF24mQXN1pJYFfCO-6azSETj_Qc"
-    //     //   strokeWidth={3}
-    //     //   strokeColor="blue"
-    //     //   mode="bicycling"
-    //     // />
-    //   )}
 
-    // </MapView>
     <View style={{ flex: 1 }}>
       <MapView style={{ flex: 1 }} region={region}>
-        {pickupPosition.pickupPositionDetail && (
+        {pickupPosition && (
           <Marker
             coordinate={{
-              latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-              longitude: pickupPosition.pickupPositionDetail.geometry.location.lng,
+              latitude: pickupPosition.geometry.location.lat,
+              longitude: pickupPosition.geometry.location.lng,
             }}
           />
         )}
-        {pickupPosition.destinationPositionDetail && (
+        {destinationPosition && (
           <Marker
             coordinate={{
-              latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-              longitude: pickupPosition.destinationPositionDetail.geometry.location.lng,
+              latitude: destinationPosition.geometry.location.lat,
+              longitude: destinationPosition.geometry.location.lng,
             }}
           />
         )}
-        {pickupPosition.pickupPositionDetail && pickupPosition.destinationPositionDetail && (
+        {pickupPosition && destinationPosition && (
           <MapViewDirections
             origin={{
-              latitude: pickupPosition.pickupPositionDetail.geometry.location.lat,
-              longitude: pickupPosition.pickupPositionDetail.geometry.location.lng,
+              latitude: pickupPosition.geometry.location.lat,
+              longitude: pickupPosition.geometry.location.lng,
             }}
             destination={{
-              latitude: pickupPosition.destinationPositionDetail.geometry.location.lat,
-              longitude: pickupPosition.destinationPositionDetail.geometry.location.lng,
+              latitude: destinationPosition.geometry.location.lat,
+              longitude: destinationPosition.geometry.location.lng,
             }}
             apikey="AIzaSyCIYCycKF24mQXN1pJYFfCO-6azSETj_Qc"
             strokeWidth={3}
