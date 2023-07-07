@@ -9,17 +9,34 @@ import { getStation } from "../../service/stationService";
 import { getRouteByUserId } from "../../service/routeService";
 import { UserContext } from "../../context/UserContext";
 
-const SelectRouteScreen = () => {
+const SelectRouteScreen = ({}) => {
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
 
   const [stations, setStations] = useState([]);
 
+  const [pickupPosition, setPickupPosition] = useState(null);
+  const [destinationPosition, setDestinationPosition] = useState(null);
+
+  const handlePlaceSelection = (details) => {
+    setSelectedPlace(details);
+    onPickupPlaceSelect(details); // Pass the selected place details to the parent component
+  };
+  const handlePickupPlaceSelection = (details, screen) => {
+    setPickupPosition(details);
+    screen === "BikeBookingScreen" && handlePlaceSelection(details);
+  };
+
+  const handleDestinationPlaceSelection = (details, screen) => {
+    setDestinationPosition(details);
+    screen === "BikeBookingScreen" && handlePlaceSelection(details);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getRouteByUserId();
-        console.log(response.data)// Call the getRouteByUserId function
+        console.log(response.data); // Call the getRouteByUserId function
         setStations(response.data.data);
       } catch (error) {
         console.error(error);
@@ -28,7 +45,7 @@ const SelectRouteScreen = () => {
 
     fetchData();
   }, []);
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -40,11 +57,11 @@ const SelectRouteScreen = () => {
       </View>
       <View style={styles.body}>
         <View style={styles.card}>
-          <InputCard />
+          <InputCard
+            handlePickupPlaceSelection={handlePickupPlaceSelection}
+            handleDestinationPlaceSelection={handleDestinationPlaceSelection}
+          />
         </View>
-        {/* <View style={styles.card}>
-            
-        </View> */}
         <View style={styles.card}>
           <RecommendedLocation
             title="Tuyến đường được đề xuất"
@@ -56,11 +73,9 @@ const SelectRouteScreen = () => {
             }))}
           />
         </View>
-      </View>
-      <View style={styles.card_button}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("BikeBooking")}
+          onPress={() => navigation.navigate("BikeBooking", {pickupPosition: pickupPosition, destinationPosition: destinationPosition})}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>Tiếp tục</Text>
         </TouchableOpacity>

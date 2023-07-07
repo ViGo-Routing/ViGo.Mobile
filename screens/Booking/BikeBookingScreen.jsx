@@ -17,7 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import InputCard from "../../components/Card/InputCard.jsx";
 import SwtichVehicle from "../../components/Select Box/SwitchVehicle.jsx";
 
-const BikeBookingScreen = () => {
+const BikeBookingScreen = (props) => {
   const navigation = useNavigation();
 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -50,10 +50,11 @@ const BikeBookingScreen = () => {
       vehicleType: "sevenSeater",
     },
   ];
-
+  const pickup = props.route.params.pickupPosition;
+  const destination = props.route.params.destinationPosition;
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [pickupPosition, setPickupPosition] = useState(null);
-  const [destinationPosition, setDestinationPosition] = useState(null);
+  const [pickupPosition, setPickupPosition] = useState(pickup);
+  const [destinationPosition, setDestinationPosition] = useState(destination);
 
   const handlePlaceSelection = (details) => {
     console.log("Father detail", details);
@@ -62,10 +63,12 @@ const BikeBookingScreen = () => {
   };
   const handlePickupPlaceSelection = (details) => {
     setPickupPosition(details);
+    console.log("pickup ne:", pickupPosition);
   };
 
   const handleDestinationPlaceSelection = (details) => {
     setDestinationPosition(details);
+    console.log("destination ne:", destinationPosition);
   };
 
   const handleContinueButtonPress = (response) => {
@@ -132,7 +135,10 @@ const BikeBookingScreen = () => {
           width: "90%",
         }}
       >
-        <InputCard />
+        <InputCard
+          pickupPosition={pickupPosition}
+          destinationPosition={destinationPosition}
+        />
       </View>
 
       {/* BACKBUTTON */}
@@ -183,7 +189,7 @@ const BikeBookingScreen = () => {
         onDestinationPlaceSelect={handleDestinationPlaceSelection}
         visible={true}
       >
-        <View style={styles.selectBoxContainer}>
+        {/* <View style={styles.selectBoxContainer}>
           <TouchableOpacity
             style={[
               styles.selectBox,
@@ -208,7 +214,7 @@ const BikeBookingScreen = () => {
           options={buttonRows}
           selectedOption={selectedVehicle}
           onSelect={handleOptionSelect}
-        />
+        /> */}
 
         <View
           style={{

@@ -71,7 +71,6 @@ const BottomSheet = ({ visible, onClose, onPickupPlaceSelect, onDestinationPlace
           <TextInput style={styles.input} placeholder="Search..." />
           <Text><Ionicons name="flag" size={20} color="red" />  Điểm đến</Text>
           <TextInput style={styles.input} placeholder="Search..." /> */}
-
           <GooglePlacesAutocomplete
             placeholder='Điểm đón ...'
             styles={

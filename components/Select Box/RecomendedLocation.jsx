@@ -25,7 +25,7 @@ const RecommendedLocation = ({ title, items }) => {
             <Ionicons name={item.iconLeft} size={24} color="black" />
             <View>
               <Text style={styles.listItemText}>{item.text}</Text>
-              <Text style={styles.listItemAddress}>{item.address}</Text>
+              {/* <Text style={styles.listItemAddress}>{item.address}</Text> */}
             </View>
             <Ionicons name={item.iconRight} size={24} color="black" />
           </TouchableOpacity>

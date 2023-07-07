@@ -3,76 +3,43 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
-const InputCard = () => {
+const InputCard = ({ handlePickupPlaceSelection, handleDestinationPlaceSelection }) => {
   const [startStation, setStartStation] = useState(null);
   const [endStation, setEndStation] = useState(null);
-
+  
   const [selectedPlace, setSelectedPlace] = useState(null);
+
   const [pickupPosition, setPickupPosition] = useState(null);
   const [destinationPosition, setDestinationPosition] = useState(null);
 
   const handlePlaceSelection = (details) => {
-    console.log("Father detail", details);
     setSelectedPlace(details);
-    // Do something with the selected place details in the father components
-  };
-  const handlePickupPlaceSelection = (details) => {
-    setPickupPosition(details);
+    onPickupPlaceSelect(details); // Pass the selected place details to the parent component
   };
 
-  const handleDestinationPlaceSelection = (details) => {
-    setDestinationPosition(details);
-  };
+  // const handlePickupPlaceSelection = (details, screen) => {
+  //   setPickupPosition(details);
+  //   screen === "BikeBookingScreen" && handlePlaceSelection(details);
+  // };
 
-  const handleContinueButtonPress = (response) => {
-    console.log(savedPickDetails);
-
-    const requestData = {
-      // Request body data
-      name: "App Booking",
-      distance: 15,
-      duration: 15,
-      status: "ACTIVE",
-      routineType: "RANDOMLY",
-      routeType: "SPECIFIC_ROUTE_SPECIFIC_TIME",
-      startStation: {
-        longtitude: savedPickDetails.geometry.location.lng,
-        latitude: savedPickDetails.geometry.location.lat,
-        name: savedPickDetails.name,
-        address: savedPickDetails.formatted_address,
-      },
-      endStation: {
-        longtitude: savedDesDetails.geometry.location.lng,
-        latitude: savedDesDetails.geometry.location.lat,
-        name: savedDesDetails.name,
-        address: savedDesDetails.formatted_address,
-      },
-    };
-
-    console.log("send ", requestData);
-    response = createRoute(requestData);
-    if (response != null) {
-      navigation.navigate("BikeSettingSchedule");
-    }
-  };
+  // const handleDestinationPlaceSelection = (details, screen) => {
+  //   setDestinationPosition(details);
+  //   screen === "BikeBookingScreen" && handlePlaceSelection(details);
+  // };
 
   return (
     <View style={styles.card}>
       <View style={styles.row}>
         <Ionicons name="person-circle-outline" size={20} color="blue" />
-        {/* <TextInput
-          style={styles.input1}
-          placeholder="Chọn điểm bắt đầu"
-          pickupPositionDetail={pickupPosition}
-        /> */}
         <GooglePlacesAutocomplete
+          
           placeholder="Điểm đón ..."
           styles={{
             textInput: {
               fontSize: 16,
             },
           }}
-          onPress={handlePickupPlaceSelection}
+          onPress={(data, details) => handlePickupPlaceSelection(details)}
           returnKeyType={"search"}
           fetchDetails={true}
           return
@@ -89,7 +56,6 @@ const InputCard = () => {
       <View style={styles.separator} />
       <View style={styles.row}>
         <Ionicons name="compass-outline" size={18} color="orange" />
-        {/* <TextInput style={styles.input} placeholder="Chọn điểm kết thuc" destinationPositionDetail={destinationPosition} /> */}
         <GooglePlacesAutocomplete
           placeholder="Điểm đến ..."
           styles={{
@@ -97,7 +63,7 @@ const InputCard = () => {
               fontSize: 16,
             },
           }}
-          onPress={handleDestinationPlaceSelection}
+          onPress={(data, details) => handleDestinationPlaceSelection(details)}
           returnKeyType={"search"}
           fetchDetails={true}
           return
