@@ -1,12 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
-const InputCard = ({ handlePickupPlaceSelection, handleDestinationPlaceSelection }) => {
+const InputCard = ({
+  handlePickupPlaceSelection,
+  handleDestinationPlaceSelection,
+  pickupLocation,
+  destinationLocation,
+}) => {
   const [startStation, setStartStation] = useState(null);
   const [endStation, setEndStation] = useState(null);
-  
+
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   const [pickupPosition, setPickupPosition] = useState(null);
@@ -27,12 +32,32 @@ const InputCard = ({ handlePickupPlaceSelection, handleDestinationPlaceSelection
   //   screen === "BikeBookingScreen" && handlePlaceSelection(details);
   // };
 
+  var pickupPositionRef, destinationPositionRef;
+
+  useEffect(() => {
+    if (
+      pickupLocation &&
+      destinationLocation &&
+      pickupPositionRef &&
+      destinationPositionRef
+    ) {
+      pickupPositionRef.setAddressText(
+        pickupLocation?.name + ", " + pickupLocation?.formatted_address
+      );
+      destinationPositionRef.setAddressText(
+        destinationLocation?.name +
+          ", " +
+          destinationLocation?.formatted_address
+      );
+    }
+  }, []);
+
   return (
     <View style={styles.card}>
       <View style={styles.row}>
         <Ionicons name="person-circle-outline" size={20} color="blue" />
         <GooglePlacesAutocomplete
-          
+          ref={(ref) => (pickupPositionRef = ref)}
           placeholder="Điểm đón ..."
           styles={{
             textInput: {
@@ -57,6 +82,7 @@ const InputCard = ({ handlePickupPlaceSelection, handleDestinationPlaceSelection
       <View style={styles.row}>
         <Ionicons name="compass-outline" size={18} color="orange" />
         <GooglePlacesAutocomplete
+          ref={(ref) => (destinationPositionRef = ref)}
           placeholder="Điểm đến ..."
           styles={{
             textInput: {

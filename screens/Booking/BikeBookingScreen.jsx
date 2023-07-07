@@ -136,8 +136,10 @@ const BikeBookingScreen = (props) => {
         }}
       >
         <InputCard
-          pickupPosition={pickupPosition}
-          destinationPosition={destinationPosition}
+          pickupLocation={pickupPosition}
+          destinationLocation={destinationPosition}
+          handlePickupPlaceSelection={handlePickupPlaceSelection}
+          handleDestinationPlaceSelection={handleDestinationPlaceSelection}
         />
       </View>
 
