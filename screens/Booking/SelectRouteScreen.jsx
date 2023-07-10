@@ -67,7 +67,7 @@ const SelectRouteScreen = ({ }) => {
             items={stations.map((station) => ({
               iconLeft: "time",
               text: station.name,
-              address: station.address, // add this line
+              address: station.address,
               iconRight: "ios-arrow-forward",
             }))}
           />

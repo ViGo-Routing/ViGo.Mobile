@@ -5,16 +5,17 @@ import InputCard from "../../components/Card/InputCard.jsx";
 import { themeColors } from "../../assets/theme/index.jsx";
 import DetailCard from "../../components/Card/DetailCard";
 import { useNavigation } from "@react-navigation/native";
-import { createFareCalculate } from "../../service/bookingService.jsx";
+import { createBooking, createFareCalculate } from "../../service/bookingService.jsx";
 import { getRouteById } from "../../service/routeService.jsx";
 import { getVehicleTypeById } from "../../service/vehicleTypeService.jsx";
+import { getWalletByUserId } from "../../service/walletService.jsx";
 
 const BookingDetailScreen = ({ route }) => {
-  const { data } = route.params
+  const { data } = route.params;
   const [fareCalculation, setFareCalculation] = useState(null);
   const [vehicle, setVehicle] = useState(null);
   const [routeData, setRoute] = useState(null);
-
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,18 +28,20 @@ const BookingDetailScreen = ({ route }) => {
           totalNumberOfTickets: 0,
           tripType: result.type,
           routineType: "RANDOMLY",
-          roundTripBeginTime: data[0].pickupTime
-        }
-        setRoute(dataResponse)
-        console.log("sssssssssssssssss", dataResponse)
-        createFareCalculate(dataResponse).then((response) => setFareCalculation(response));
-        getVehicleTypeById(dataResponse.vehicleTypeId).then((response) => setVehicle(response));
+          roundTripBeginTime: data[0].pickupTime,
+        };
+        setRoute(dataResponse);
+        console.log("sssssssssssssssss", dataResponse);
+        createFareCalculate(dataResponse).then((response) =>
+          setFareCalculation(response)
+        );
+        getVehicleTypeById(dataResponse.vehicleTypeId).then((response) =>
+          setVehicle(response)
+        );
       });
-
     };
     fetchData();
   }, []);
-
 
   return (
     <View style={styles.container}>
@@ -52,7 +55,10 @@ const BookingDetailScreen = ({ route }) => {
         <View style={styles.detail}>
           <Text style={styles.Title}>Chuyến đi</Text>
           <DetailCard title="Loại xe" info={vehicle?.name} />
-          <DetailCard title="Loại Chuyến" info={routeData?.routineType === "RANDOMLY" ? "Tự do" : "Theo trạm"} />
+          <DetailCard
+            title="Loại Chuyến"
+            info={routeData?.routineType === "RANDOMLY" ? "Tự do" : "Theo trạm"}
+          />
           <DetailCard title="Ngày bắt đầu" info={data[0]?.routineDate} />
 
           <DetailCard title="Ngày đặt" info={data[0]?.createdTime} />
@@ -61,7 +67,7 @@ const BookingDetailScreen = ({ route }) => {
           <Text style={styles.Title}>Thanh Toán</Text>
           <DetailCard title="Giá gốc" info={fareCalculation?.originalFare} />
           <DetailCard title="Phụ phí" info={fareCalculation?.additionalFare} />
-          <DetailCard title="Mã giảm giá" info="12,000 VND" />
+          {/* <DetailCard title="Mã giảm giá" info="*****" /> */}
           <DetailCard title="Tổng tiền" info={fareCalculation?.finalFare} />
         </View>
       </View>
@@ -69,22 +75,42 @@ const BookingDetailScreen = ({ route }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            Alert.alert(
-              "Hoàn Thành",
-              "Bàn vừa hoàn tất đặt chuyến xe định kì, hãy đợi chúng tôi tìm tài xế thích hợp cho bạn nhé!",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                {
-                  text: "OK",
-                  onPress: () => navigation.navigate("MyRoute"),
-                },
-              ],
-              { cancelable: false }
-            );
+            const checkBalance = async () => {
+              try {
+                const walletResponse = await getWalletByUserId(id);
+                const walletBalance = walletResponse.data.balance;
+
+                if (walletBalance < fareCalculation?.finalFare) {
+                  Alert.alert(
+                    "Sorry",
+                    "You can't create a booking due to insufficient funds."
+                  );
+                } else {
+                  const bookingResponse = await createBooking(requestData);
+                  const bookingId = bookingResponse.data.id;
+                  Alert.alert(
+                    "Hoàn Thành",
+                    "Bàn vừa hoàn tất đặt chuyến xe định kì, hãy đợi chúng tôi tìm tài xế thích hợp cho bạn nhé!",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel",
+                      },
+                      {
+                        text: "OK",
+                        onPress: () => navigation.navigate("MyRoute"),
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+                }
+              } catch (error) {
+                console.log("Error fetching wallet balance:", error);
+              }
+            };
+
+            checkBalance();
           }}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>Tiếp tục</Text>

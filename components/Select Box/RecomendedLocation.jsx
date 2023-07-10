@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { getStation } from "../../service/stationService";
 
@@ -19,23 +25,31 @@ const RecommendedLocation = ({ title, items }) => {
         {title}
       </Text>
       <View style={styles.separator} />
-      <View style={styles.list}>
-        {items.map((item, index) => (
-          <TouchableOpacity key={index} style={styles.listItem}>
-            <Ionicons name={item.iconLeft} size={24} color="black" />
-            <View>
-              <Text style={styles.listItemText}>{item.text}</Text>
-              {/* <Text style={styles.listItemAddress}>{item.address}</Text> */}
-            </View>
-            <Ionicons name={item.iconRight} size={24} color="black" />
-          </TouchableOpacity>
-        ))}
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        style={styles.scrollView}
+      >
+        <View style={styles.list}>
+          {items.map((item, index) => (
+            <TouchableOpacity key={index} style={styles.listItem}>
+              <Ionicons name={item.iconLeft} size={24} color="black" />
+              <View>
+                <Text style={styles.listItemText} numberOfLines={1}>
+                  {item.text}
+                </Text>
+              </View>
+              <Ionicons name={item.iconRight} size={24} color="black" />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   card: {
+    height: 420,
     borderRadius: 15,
     backgroundColor: "#fff",
     shadowColor: "#000",
@@ -56,6 +70,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#ddd",
     marginVertical: 10,
   },
+  container: {
+    flexGrow: 1,
+  },
+  scrollView: {
+    height: 200, // Set a fixed height for the ScrollView
+  },
   list: {
     flexDirection: "column",
   },
@@ -67,6 +87,7 @@ const styles = StyleSheet.create({
   listItemText: {
     flex: 1,
     marginHorizontal: 10,
+    width: 240,
   },
   listItemAddress: {
     color: "#999",
