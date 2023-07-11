@@ -25,6 +25,7 @@
     "@react-navigation/material-bottom-tabs": "^6.2.15",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "@rnmapbox/maps": "^10.0.10-rc.0",
     "axios": "^1.4.0",
     "deep-extend": "^0.6.0",
     "deprecated-react-native-prop-types": "^4.1.0",

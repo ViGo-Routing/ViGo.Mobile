@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import MapboxGeocoder from "@mapbox/react-native-mapbox-gl/geocoder";
 
 const InputCard = ({
   handlePickupPlaceSelection,
@@ -21,16 +22,6 @@ const InputCard = ({
     setSelectedPlace(details);
     onPickupPlaceSelect(details); // Pass the selected place details to the parent component
   };
-
-  // const handlePickupPlaceSelection = (details, screen) => {
-  //   setPickupPosition(details);
-  //   screen === "BikeBookingScreen" && handlePlaceSelection(details);
-  // };
-
-  // const handleDestinationPlaceSelection = (details, screen) => {
-  //   setDestinationPosition(details);
-  //   screen === "BikeBookingScreen" && handlePlaceSelection(details);
-  // };
 
   var pickupPositionRef, destinationPositionRef;
 
@@ -56,51 +47,25 @@ const InputCard = ({
     <View style={styles.card}>
       <View style={styles.row}>
         <Ionicons name="person-circle-outline" size={20} color="blue" />
-        <GooglePlacesAutocomplete
-          ref={(ref) => (pickupPositionRef = ref)}
+        {/* Replace GooglePlacesAutocomplete with MapboxGeocoder */}
+        <MapboxGeocoder
+          onSelected={(data, details) => handlePickupPlaceSelection(details)}
           placeholder="Điểm đón ..."
-          styles={{
-            textInput: {
-              fontSize: 16,
-            },
-          }}
-          onPress={(data, details) => handlePickupPlaceSelection(details)}
-          returnKeyType={"search"}
-          fetchDetails={true}
-          return
-          minLength={2}
-          enablePoweredByContainer={false}
-          query={{
-            key: "AIzaSyCIYCycKF24mQXN1pJYFfCO-6azSETj_Qc",
-            language: "vn",
-          }}
-          nearbyPlacesAPI="GooglePlacesSearch"
-          debounce={400}
+          accessToken="sk.eyJ1IjoicGhhdGt2ZCIsImEiOiJjbGp3eGxnZWMwdWV5M2luMXdrNG1kNGYxIn0.N13oGgj6OWkMK0-k6-orCQ"
+          autocomplete={true}
+          countries="vn"
         />
       </View>
       <View style={styles.separator} />
       <View style={styles.row}>
         <Ionicons name="compass-outline" size={18} color="orange" />
-        <GooglePlacesAutocomplete
-          ref={(ref) => (destinationPositionRef = ref)}
+        {/* Replace GooglePlacesAutocomplete with MapboxGeocoder */}
+        <MapboxGeocoder
+          onSelected={(data, details) => handleDestinationPlaceSelection(details)}
           placeholder="Điểm đến ..."
-          styles={{
-            textInput: {
-              fontSize: 16,
-            },
-          }}
-          onPress={(data, details) => handleDestinationPlaceSelection(details)}
-          returnKeyType={"search"}
-          fetchDetails={true}
-          return
-          minLength={2}
-          enablePoweredByContainer={false}
-          query={{
-            key: "AIzaSyCIYCycKF24mQXN1pJYFfCO-6azSETj_Qc",
-            language: "vn",
-          }}
-          nearbyPlacesAPI="GooglePlacesSearch"
-          debounce={400}
+          accessToken="sk.eyJ1IjoicGhhdGt2ZCIsImEiOiJjbGp3eGxnZWMwdWV5M2luMXdrNG1kNGYxIn0.N13oGgj6OWkMK0-k6-orCQ"
+          autocomplete={true}
+          countries="vn"
         />
       </View>
     </View>
